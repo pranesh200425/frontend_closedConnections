@@ -24,7 +24,7 @@ export default function Feed() {
           onSubmit={handlePost}
           className="bg-white p-6 rounded-lg shadow border-dotted border-2 border-gray-300 mb-8"
         >
-          <h2 className="text-3xl font-extrabold mb-5 text-gray-500 text-center">Create a Post</h2>
+          
           <div className="flex gap-2">
             <input
               type="text"

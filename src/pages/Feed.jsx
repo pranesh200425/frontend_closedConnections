@@ -1,4 +1,5 @@
 import React, { useState } from 'react'
+import '../App.css'
 
 export default function Feed() {
   const [posts, setPosts] = useState([
@@ -27,7 +28,7 @@ export default function Feed() {
   }
 
   return (
-    <div className="flex p-2 min-h-screen pt-4 bg-white w-[100%] ">
+    <div className="flex p-2 h-screen pt-4 overflow-none bg-white w-[100%] ">
       {/* Sidebar for profile info */}
       <div className="hidden md:flex flex-col items-center w-72 mr-8 bg-white p-6 rounded-lg shadow border-dotted border-2 border-gray-300 h-fit self-start">
         <img
@@ -50,7 +51,7 @@ export default function Feed() {
       <div className="w-[75%] ">
         <form
           onSubmit={handlePost}
-          className="bg-white p-6 rounded-lg shadow border-dotted border-2 border-gray-300 mb-8"
+          className="bg-yellow-100 p-6 rounded-lg shadow border-dotted border-2 border-yellow-300 mb-8"
         >
           
           <div className="flex gap-2">
@@ -64,13 +65,13 @@ export default function Feed() {
             />
             <button
               type="submit"
-              className="border-2 border-dotted border-yellow-500 text-gray-500 px-4 py-2 rounded hover:border-yellow-500 hover:bg-yellow-400 hover:text-amber-50 transition"
+              className="border-2 border-dotted bg-white border-yellow-500 text-gray-500 px-4 py-2 hover:border-yellow-500 hover:bg-yellow-400 rounded-4xl hover:text-amber-50 transition"
             >
               Post
             </button>
           </div>
         </form>
-        <div className="space-y-4">
+        <div className=" flex flex-col h-9/12 space-y-4 overflow-y-scroll" id="feed" >
           {posts.map(post => (
             <div
               key={post.id}

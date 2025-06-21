@@ -7,7 +7,14 @@ function Login({ onSwitch }) {
 
   const handleSubmit = (e) => {
     e.preventDefault()
-    alert(`Email: ${email}\nPassword: ${password}`)
+    fetch('http://localhost:5000/api/login', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ email, password })
+    })
+      .then(res => res.json())
+      .then(data => alert(data.message))
+      .catch(err => alert( err.message))
   }
 
   return (
@@ -67,8 +74,17 @@ function Signup({ onSwitch }) {
       alert('Passwords do not match!')
       return
     }
-    alert(`Signup successful!\nEmail: ${email}`)
+    fetch('http://localhost:5000/api/signup', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ email, password })
+    })
+      .then(res => res.json())
+      .then(data => alert(data.message))
+      .catch(err => alert(err.message))
   }
+
+  const mongo = 'mongodb+srv://user:mangomango2233007@cluster0.miuie.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0'
 
   return (
     <form

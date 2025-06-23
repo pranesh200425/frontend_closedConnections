@@ -1,19 +1,34 @@
 import React, { useState } from 'react'
+import { useNavigate } from 'react-router'
 import '../index.css'
+import Feed from './Feed';
+
+function setLoginStat(){
+  localStorage.setItem('token', 'true');
+}
 
 function Login({ onSwitch }) {
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
+  //const navigate = useNavigate()
+
+  let userInfo;
 
   const handleSubmit = (e) => {
     e.preventDefault()
-    fetch('http://localhost:5000/api/login', {
+    fetch('https://backend-closedconnections-tq1k.onrender.com/api/login', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ email, password })
     })
       .then(res => res.json())
-      .then(data => alert(data.message))
+      .then(data => { 
+        alert(data.message);
+        if(data.message === 'Login successful') {
+          return <Feed />
+        }
+        setLoginStat()
+      })
       .catch(err => alert( err.message))
   }
 
@@ -67,20 +82,26 @@ function Signup({ onSwitch }) {
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
   const [confirmPassword, setConfirmPassword] = useState('')
-
+  const navigate = useNavigate()
   const handleSubmit = (e) => {
     e.preventDefault()
     if (password !== confirmPassword) {
       alert('Passwords do not match!')
       return
     }
-    fetch('http://localhost:5000/api/signup', {
+    fetch('https://backend-closedconnections-tq1k.onrender.com/api/signup', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ email, password })
     })
       .then(res => res.json())
-      .then(data => alert(data.message))
+      .then(data => { 
+        alert(data.message) 
+        if(data.message === 'Signup successful') {
+          return <Feed />
+        }
+        setLoginStat()
+      })
       .catch(err => alert(err.message))
   }
 

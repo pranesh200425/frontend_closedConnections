@@ -9,16 +9,39 @@ export default function Feed() {
   const [input, setInput] = useState('')
 
   // Example user info
+  const userInfo = JSON.parse(localStorage.getItem('userInfo'))
   const user = {
-    username: 'You',
+    username: userInfo.email,
     profilePic: 'https://ui-avatars.com/api/?name=You&background=random',
     bio: 'Just another user.',
     posts: posts.filter(p => p.user === 'You').length,
     joined: 'June 2025'
   }
 
+  const getPosts = () => {
+    fetch('http://localhost:5000/api/getpost')
+    .then(res => res.json())
+    .then(data => {
+      //console.log('Posts fetched:', data)
+      setPosts(data)
+    })
+  }
+  getPosts()
+  
   const handlePost = (e) => {
     e.preventDefault()
+
+    fetch('http://localhost:5000/api/post', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ content: input })
+    })
+    .then(res => res.json())
+    .then(data => {
+      console.log('Post created:', data)
+    })
+    .catch(err => console.error('Error creating post:', err))
+
     if (input.trim() === '') return
     setPosts([
       { id: Date.now(), user: 'You', content: input },
@@ -74,7 +97,7 @@ export default function Feed() {
         <div className=" flex flex-col h-9/12 space-y-4 overflow-y-scroll" id="feed" >
           {posts.map(post => (
             <div
-              key={post.id}
+              key={post._id}
               className="bg-white p-4 rounded-lg shadow border-dotted border-2 border-gray-300"
             >
               <div className="font-bold text-gray-500 mb-1">{post.user}</div>

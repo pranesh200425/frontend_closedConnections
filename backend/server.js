@@ -1,11 +1,14 @@
 // backend/server.js
+require('dotenv').config()
 const express = require('express')
 const cors = require('cors')
 const mongoose = require('mongoose')
 
+
 const app = express()
 app.use(cors())
 app.use(express.json())
+const mangoURI = process.env.MONGO_URI
 
 const users = []
 
@@ -36,12 +39,30 @@ app.post('/api/login', async (req, res) => {
   }
 })
 
+app.post('/api/post', async (req, res) => {
+  const { content } = req.body
+  try {
+    const post = await Post.create({ content })
+    res.json({ message: 'Post created', post })
+  } catch (err) {
+    res.status(500).json({ message: 'Server error' })
+  }
+})
+
+app.get('/api/getpost', async (req, res) => {
+  try {
+    const posts = await Post.find()
+    res.json(posts)
+  } catch (err) {
+    res.status(500).json({ message: 'Server error' })
+  }
+})
+
 console.log(users)
 app.listen(5000, () => console.log('Backend running on http://localhost:5000'))
 
-const mongo = 'mongodb+srv://user:mangomango2233007@cluster0.miuie.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0'
 
-mongoose.connect(mongo, {
+mongoose.connect(mangoURI, {
 })
 .then(() => console.log('MongoDB connected'))
 .catch(err => console.error('MongoDB connection error:', err))
@@ -51,4 +72,10 @@ const userSchema = new mongoose.Schema({
   password: String,
 })
 
+const postSchema = new mongoose.Schema({
+  title: String,
+  content: String,
+})
+
 const User = mongoose.model('User', userSchema)
+const Post = mongoose.model('Post', postSchema)

@@ -2,10 +2,7 @@ import React, { useState } from 'react'
 import '../App.css'
 
 export default function Feed() {
-  const [posts, setPosts] = useState([
-    { id: 1, user: 'Alice', content: 'Hello world!' },
-    { id: 2, user: 'Boob', content: 'This is my first post.' }
-  ])
+  const [posts, setPosts] = useState([])
   const [input, setInput] = useState('')
 
   // Example user info

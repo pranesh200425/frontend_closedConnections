@@ -18,8 +18,8 @@ function App() {
             : <Redirect to = {<AuthPage />} />
         } */}
         <Route path="/" element={<AppWrapper />} />
-        {/* <Route index path="/Login" element={ <AuthPage/> } />
-        <Route path="/" element={<Feed />} /> */}
+        <Route index path="/Login" element={ <AuthPage/> } />
+        <Route path="/Home" element={<Feed />} /> 
         <Route path="/contact" element={<h1>Contact Page</h1>} />
         <Route path="*" element={<h1>404 Not Found</h1>} />
       </Routes>

@@ -13,6 +13,7 @@ function Login({ onSwitch }) {
   //const navigate = useNavigate()
 
   let userInfo;
+  const navigate = useNavigate()
 
   const handleSubmit = (e) => {
     e.preventDefault()
@@ -25,7 +26,9 @@ function Login({ onSwitch }) {
       .then(data => { 
         alert(data.message);
         if(data.message === 'Login successful') {
-          return <Feed />
+          userInfo = { email }
+          localStorage.setItem('userInfo', JSON.stringify(userInfo))
+          navigate('/Home')
         }
         setLoginStat()
       })

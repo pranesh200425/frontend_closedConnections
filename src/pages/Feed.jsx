@@ -19,7 +19,7 @@ export default function Feed() {
   }
 
   const getPosts = () => {
-    fetch('http://localhost:5000/api/getpost')
+    fetch('https://backend-closedconnections-tq1k.onrender.com/api/getpost')
     .then(res => res.json())
     .then(data => {
       //console.log('Posts fetched:', data)
@@ -31,7 +31,7 @@ export default function Feed() {
   const handlePost = (e) => {
     e.preventDefault()
 
-    fetch('http://localhost:5000/api/post', {
+    fetch('https://backend-closedconnections-tq1k.onrender.com/api/post', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ content: input })

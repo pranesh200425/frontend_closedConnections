@@ -15,8 +15,10 @@ export default function Feed() {
     joined: 'June 2025'
   }
 
+  const localURL = 'http://localhost:3000'
+  const backendURL = 'https://backend-closedconnections-tq1k.onrender.com'
   const getPosts = () => {
-    fetch('https://backend-closedconnections-tq1k.onrender.com/api/getpost')
+    fetch(`${localURL}/api/getpost`)
     .then(res => res.json())
     .then(data => {
       //console.log('Posts fetched:', data)
@@ -28,7 +30,7 @@ export default function Feed() {
   const handlePost = (e) => {
     e.preventDefault()
 
-    fetch('https://backend-closedconnections-tq1k.onrender.com/api/post', {
+    fetch(`${localURL}/api/getpost`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ content: input })

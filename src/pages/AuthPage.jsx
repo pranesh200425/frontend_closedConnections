@@ -15,9 +15,12 @@ function Login({ onSwitch }) {
   let userInfo;
   const navigate = useNavigate()
 
+  const localURL = 'http://localhost:3000'
+  const backendURL = 'https://backend-closedconnections-tq1k.onrender.com'
+
   const handleSubmit = (e) => {
     e.preventDefault()
-    fetch('https://backend-closedconnections-tq1k.onrender.com/api/login', {
+    fetch(`${localURL}/api/getpost`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ email, password })
@@ -86,13 +89,15 @@ function Signup({ onSwitch }) {
   const [password, setPassword] = useState('')
   const [confirmPassword, setConfirmPassword] = useState('')
   const navigate = useNavigate()
+  const localURL = 'http://localhost:3000'
+  const backendURL = 'https://backend-closedconnections-tq1k.onrender.com'
   const handleSubmit = (e) => {
     e.preventDefault()
     if (password !== confirmPassword) {
       alert('Passwords do not match!')
       return
     }
-    fetch('https://backend-closedconnections-tq1k.onrender.com/api/signup', {
+    fetch(`${localURL}/api/getpost`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ email, password })

@@ -15,7 +15,7 @@ export default function Feed() {
     joined: 'June 2025'
   }
 
-  const localURL = 'http://localhost:3000'
+  const localURL = 'http://localhost:5000'
   const backendURL = 'https://backend-closedconnections-tq1k.onrender.com'
   const getPosts = () => {
     fetch(`${localURL}/api/getpost`)

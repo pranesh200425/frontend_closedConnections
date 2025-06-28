@@ -89,7 +89,7 @@ function Signup({ onSwitch }) {
   const [password, setPassword] = useState('')
   const [confirmPassword, setConfirmPassword] = useState('')
   const navigate = useNavigate()
-  const localURL = 'http://localhost:3000'
+  const localURL = 'http://localhost:5000'
   const backendURL = 'https://backend-closedconnections-tq1k.onrender.com'
   const handleSubmit = (e) => {
     e.preventDefault()
@@ -97,7 +97,7 @@ function Signup({ onSwitch }) {
       alert('Passwords do not match!')
       return
     }
-    fetch(`${localURL}/api/getpost`, {
+    fetch(`${localURL}/api/signup`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ email, password })

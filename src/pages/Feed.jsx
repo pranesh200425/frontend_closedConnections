@@ -30,7 +30,7 @@ export default function Feed() {
   const handlePost = (e) => {
     e.preventDefault()
 
-    fetch(`${localURL}/api/getpost`, {
+    fetch(`${localURL}/api/post`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ content: input })
@@ -94,7 +94,7 @@ export default function Feed() {
           </div>
         </form>
         <div className=" flex flex-col h-9/12 space-y-4 overflow-y-scroll" id="feed" >
-          {posts.map(post => (
+          { posts.length > 0 ? posts.map(post => (
             <div
               key={post._id}
               className="bg-white p-4 rounded-lg shadow border-dotted border-2 border-gray-300"
@@ -102,7 +102,9 @@ export default function Feed() {
               <div className="font-bold text-gray-500 mb-1">{post.user}</div>
               <div className="text-gray-700">{post.content}</div>
             </div>
-          ))}
+          )) : <div className = 'flex w-1/2 rounded-3xl m-auto justify-center items-center p-4 bg-slate-300  '  >
+        <h1 className = 'text-3xl' >Oops! No posts available</h1>  
+        </div> }
         </div>
       </div>
     </div>

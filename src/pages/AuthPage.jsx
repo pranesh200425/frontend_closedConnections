@@ -15,12 +15,12 @@ function Login({ onSwitch }) {
   let userInfo;
   const navigate = useNavigate()
 
-  const localURL = 'http://localhost:3000'
+  const localURL = 'http://localhost:5000'
   const backendURL = 'https://backend-closedconnections-tq1k.onrender.com'
 
   const handleSubmit = (e) => {
     e.preventDefault()
-    fetch(`${localURL}/api/getpost`, {
+    fetch(`http://localhost:5000/api/login`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ email, password })
@@ -106,15 +106,15 @@ function Signup({ onSwitch }) {
       .then(data => { 
         alert(data.message) 
         if(data.message === 'Signup successful') {
-          return <Feed />
+          //return <Feed />
+          navigate('/Home')
         }
         setLoginStat()
       })
       .catch(err => alert(err.message))
   }
 
-  const mongo = 'mongodb+srv://user:mangomango2233007@cluster0.miuie.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0'
-
+  
   return (
     <form
       onSubmit={handleSubmit}

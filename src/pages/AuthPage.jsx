@@ -107,6 +107,7 @@ function Signup({ onSwitch }) {
         alert(data.message) 
         if(data.message === 'Signup successful') {
           //return <Feed />
+          user.email = email
           navigate('/Home')
         }
         setLoginStat()

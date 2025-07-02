@@ -1,31 +1,57 @@
 import React, { useState } from 'react'
 import '../App.css'
+import Post from './Components/Post'
+import { useNavigate } from 'react-router-dom'
+import { useEffect } from 'react'
+
+
 
 export default function Feed() {
   const [posts, setPosts] = useState([])
   const [input, setInput] = useState('')
+  const navigate = useNavigate()
+ /*  function reDirect(){
+
+
+  }
+}
+reDirect() */
+
+useEffect(() => {
+  
+  const isLoggedIn = localStorage.getItem('token') !== null
+    
+    if(!isLoggedIn){
+    console.log('Redirecting to login page...'); 
+    console.log(isLoggedIn);
+    navigate('/Login')
+    }
+}, [navigate])
 
   // Example user info
   const userInfo = JSON.parse(localStorage.getItem('userInfo'))
+  if(!userInfo)
+    return null
   const user = {
-    username: userInfo.email,
+    username: 'userInfo.email',
     profilePic: 'https://ui-avatars.com/api/?name=You&background=random',
     bio: 'Just another user.',
     posts: posts.filter(p => p.user === 'You').length,
     joined: 'June 2025'
   }
 
-  const localURL = 'http://localhost:5000'
+  const localURL = 'http://localhost:5000' 
   const backendURL = 'https://backend-closedconnections-tq1k.onrender.com'
+
   const getPosts = () => {
-    fetch(`${localURL}/api/getpost`)
+    fetch(`${localURL}/api/getpost/${userInfo.email}`, )
     .then(res => res.json())
     .then(data => {
       //console.log('Posts fetched:', data)
       setPosts(data)
     })
   }
-  getPosts()
+  getPosts() 
   
   const handlePost = (e) => {
     e.preventDefault()
@@ -53,11 +79,11 @@ export default function Feed() {
     <div className="flex p-2 h-screen pt-4 overflow-none bg-white w-[100%] ">
       {/* Sidebar for profile info */}
       <div className="hidden md:flex flex-col items-center w-72 mr-8 bg-white p-6 rounded-lg shadow border-dotted border-2 border-gray-300 h-fit self-start">
-        <img
+       {/*  <img
           src={user.profilePic}
           alt="Profile"
           className="w-24 h-24 rounded-full mb-4 border-4 border-yellow-200 object-cover"
-        />
+        /> */}
         <div className="text-2xl font-bold text-gray-700 mb-1">{user.username}</div>
         <div className="text-gray-500 mb-2 text-center">{user.bio}</div>
         <div className="flex flex-col gap-1 text-sm text-gray-600 w-full">
@@ -95,16 +121,12 @@ export default function Feed() {
         </form>
         <div className=" flex flex-col h-9/12 space-y-4 overflow-y-scroll" id="feed" >
           { posts.length > 0 ? posts.map(post => (
-            <div
-              key={post._id}
-              className="bg-white p-4 rounded-lg shadow border-dotted border-2 border-gray-300"
-            >
-              <div className="font-bold text-gray-500 mb-1">{post.user}</div>
-              <div className="text-gray-700">{post.content}</div>
-            </div>
+            <Post key={post._id} content={post.content} user={post.user} />
+           
+            
           )) : <div className = 'flex w-1/2 rounded-3xl m-auto justify-center items-center p-4 bg-slate-300  '  >
         <h1 className = 'text-3xl' >Oops! No posts available</h1>  
-        </div> }
+        </div> } 
         </div>
       </div>
     </div>

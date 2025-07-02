@@ -28,8 +28,7 @@ function Post({content, key, user = 'username'}) {
         <div className="buttons flex mt-2 mb-2 justify-around">
             <div><button className='flex justify-center rounded-[3rem] items-center bg-pink-300 pt-3 pb-3 pr-4 pl-4' >like</button></div>
             <div><button className='flex bg-amber-200 justify-center items-center pt-3 pb-3 pr-4 pl-4' >comment</button></div>
-            <div><button className='flex bg-sky-100 justify-center items-center pt-3 pb-3 pr-4 pl-4' >share</button></div>
-        </div>
+      </div>
     </div>)}
     </div>
   )

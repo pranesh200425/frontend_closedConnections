@@ -91,6 +91,7 @@ function Signup({ onSwitch }) {
   const navigate = useNavigate()
   const localURL = 'http://localhost:5000'
   const backendURL = 'https://backend-closedconnections-tq1k.onrender.com'
+
   const handleSubmit = (e) => {
     e.preventDefault()
     if (password !== confirmPassword) {
@@ -107,7 +108,8 @@ function Signup({ onSwitch }) {
         alert(data.message) 
         if(data.message === 'Signup successful') {
           //return <Feed />
-          user.email = email
+          let userInfo = { email }
+          localStorage.setItem('userInfo', JSON.stringify(userInfo))
           navigate('/Home')
         }
         setLoginStat()

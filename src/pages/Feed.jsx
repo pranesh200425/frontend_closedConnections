@@ -33,7 +33,7 @@ useEffect(() => {
   if(!userInfo)
     return null
   const user = {
-    username: 'userInfo.email',
+    username: userInfo.email,
     profilePic: 'https://ui-avatars.com/api/?name=You&background=random',
     bio: 'Just another user.',
     posts: posts.filter(p => p.user === 'You').length,
@@ -56,7 +56,7 @@ useEffect(() => {
   const handlePost = (e) => {
     e.preventDefault()
 
-    fetch(`${localURL}/api/post`, {
+    fetch(`${localURL}/api/post/${userInfo.email}`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ content: input })

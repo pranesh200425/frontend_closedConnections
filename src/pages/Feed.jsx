@@ -3,6 +3,7 @@ import '../App.css'
 import Post from './Components/Post'
 import { useNavigate } from 'react-router-dom'
 import { useEffect } from 'react'
+import PostModal from './Components/PostModal'
 
 
 
@@ -28,6 +29,13 @@ useEffect(() => {
     }
 }, [navigate])
 
+let render = 0
+
+useEffect(()=>{
+  getPosts()
+  console.log("post fetched here")
+}, [render]) 
+
   // Example user info
   const userInfo = JSON.parse(localStorage.getItem('userInfo'))
   if(!userInfo)
@@ -50,30 +58,36 @@ useEffect(() => {
       //console.log('Posts fetched:', data)
       setPosts(data)
     })
+    
+      console.log(posts)
   }
-  getPosts() 
+  //getPosts() 
   
-  const handlePost = (e) => {
+  const isPost = true;
+
+  const handlePost =  (e) => {
     e.preventDefault()
 
-    fetch(`${localURL}/api/post/${userInfo.email}`, {
+     fetch(`${localURL}/api/post/${userInfo.email}`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ content: input })
     })
     .then(res => res.json())
     .then(data => {
-      console.log('Post created:', data)
+      //console.log('Post created:', data)
+      render = 0 ? 1: 0
     })
     .catch(err => console.error('Error creating post:', err))
 
     if (input.trim() === '') return
-    setPosts([
-      { id: Date.now(), user: 'You', content: input },
-      ...posts
-    ])
+    
+    getPosts()
     setInput('')
   }
+  //console.log('renders')
+  //getPosts()
+  //console.log(posts)
 
   return (
     <div className="flex p-2 h-screen pt-4 overflow-none bg-white w-[100%] ">
@@ -96,7 +110,7 @@ useEffect(() => {
         </div>
       </div>
       {/* Main feed */}
-      <div className="w-[75%] ">
+      <div className="w-[50%] ">
         <form
           onSubmit={handlePost}
           className="bg-yellow-100 p-6 rounded-lg shadow border-dotted border-2 border-yellow-300 mb-8"
@@ -120,13 +134,15 @@ useEffect(() => {
           </div>
         </form>
         <div className=" flex flex-col h-9/12 space-y-4 overflow-y-scroll" id="feed" >
-          { posts.length > 0 ? posts.map(post => (
-            <Post key={post._id} content={post.content} user={post.user} />
+        
+          {/* { posts.length > 0 ? posts.map(post => (
+            <Post key={post._id} content={post.content} user={post.user} email={post.email} time={post.createdAt} postid={post._id} />
            
             
           )) : <div className = 'flex w-1/2 rounded-3xl m-auto justify-center items-center p-4 bg-slate-300  '  >
         <h1 className = 'text-3xl' >Oops! No posts available</h1>  
-        </div> } 
+        </div> }  */}
+        <PostModal />
         </div>
       </div>
     </div>

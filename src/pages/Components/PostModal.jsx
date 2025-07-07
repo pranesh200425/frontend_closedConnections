@@ -5,14 +5,14 @@ import CommentModal from './CommentModal'
 function PostModal({ setPost }) {
 
     let postData = JSON.parse(localStorage.getItem('currentPost'))
-    console.log('postData:', postData);
+    //console.log('postData:', postData);
     const postID = postData.postID;
 
 
   return (
     <div className='flex flex-col w-full justify-start items-end h-full relative' >
-            <div className='flex w-full justify-start text-2xl font-bold text-center align-center cursor-pointer p-2 hover:bg-gray-400 duration-150 ease-in-out ' onClick={() => {setPost(false)}} >
-                &lt; --
+            <div className='flex w-full justify-start  ' onClick={() => {setPost(false)}} >
+                <p className='text-xl font-bold text-center align-center cursor-pointer pt-[0.25rem] pb-[0.25rem] pl-4 pr-4 rounded-b-2xl rounded-tr-2xl hover:text-orange-300 hover:bg-gray-400 duration-150 ease-in-out' >&lt; --</p>
             </div>
         <div className="post flex flex-col w-full sticky shadow-[0_2px_2px_rgba(0,0,0,0.15)] pr-2 pl-2 pb-2">
             <div className="post-data flex justify-between items-center  ">

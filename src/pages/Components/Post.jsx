@@ -17,9 +17,7 @@ function Post({content, keey, email, time, postid, setPost}) {
 
  function openPostModal(e)  {
     e.preventDefault()
-    console.log('post');
-    console.log(content, email, time, postID);
-    /* let currentPost = */ localStorage.setItem('currentPost', JSON.stringify({ content, email, time, postID }))
+    localStorage.setItem('currentPost', JSON.stringify({ content, email, time, postID }))
     setPost(true)
   }
 

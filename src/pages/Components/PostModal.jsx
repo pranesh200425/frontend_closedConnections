@@ -2,24 +2,33 @@ import React from 'react'
 import '../../App.css'
 import CommentModal from './CommentModal'
 
-function PostModal() {
+function PostModal({ setPost }) {
+
+    let postData = JSON.parse(localStorage.getItem('currentPost'))
+    console.log('postData:', postData);
+    const postID = postData.postID;
+
+
   return (
-    <div className='flex flex-col w-full justify-end items-end h-full relative' >
-        <div className="post flex flex-col sticky shadow-[0_2px_2px_rgba(0,0,0,0.15)] pr-2 pl-2 pb-2">
+    <div className='flex flex-col w-full justify-start items-end h-full relative' >
+            <div className='flex w-full justify-start text-2xl font-bold text-center align-center cursor-pointer p-2 hover:bg-gray-400 duration-150 ease-in-out ' onClick={() => {setPost(false)}} >
+                &lt; --
+            </div>
+        <div className="post flex flex-col w-full sticky shadow-[0_2px_2px_rgba(0,0,0,0.15)] pr-2 pl-2 pb-2">
             <div className="post-data flex justify-between items-center  ">
-                <div className="username text-2xl">Example username</div>
-                <div className="time">2 hours ago</div>
+                <div className="username text-2xl">{postData.email}</div>
+                <div className="time">{postData.time}</div>
             </div>
             <div className="content flex mt-2 mb-2">
                 <p className='text-gray-400 leading-7 ' >
-                    Lorem ipsum dolor, sit amet consectetur adipisicing elit. Quisquam quibusdam voluptatum rem, veritatis quod obcaecati iure eius similique culpa unde? Placeat fugiat consequuntur in dignissimos at totam obcaecati nobis quia!
+                    {postData.content}
                 </p>
             </div>
             <div className="other flex justify-between items-center ">
                 <div><button>likes</button></div>
             </div>
         </div>
-        <div className="comments flex flex-col h-96 w-[92%] pr-4  overflow-y-scroll " id="comments">
+        <div className="comments flex flex-col  w-[92%] pr-4  overflow-y-scroll " id="comments">
             <CommentModal />
             <CommentModal />
             <CommentModal />

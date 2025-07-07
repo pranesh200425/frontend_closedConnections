@@ -7,13 +7,17 @@ function setLoginStat(){
   localStorage.setItem('token', 'true');
 }
 
+
+
+
 function Login({ onSwitch }) {
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
-  //const navigate = useNavigate()
+ 
 
-  let userInfo;
-  const navigate = useNavigate()
+const isLoggedIn = localStorage.getItem('token') !== null
+
+let userInfo;
 
   const localURL = 'http://localhost:5000'
   const backendURL = 'https://backend-closedconnections-tq1k.onrender.com'
@@ -98,7 +102,7 @@ function Signup({ onSwitch }) {
       alert('Passwords do not match!')
       return
     }
-    fetch(`${backendURL}/api/signup`, {
+    fetch(`${localURL}/api/signup`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ email, password })

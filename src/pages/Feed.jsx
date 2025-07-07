@@ -10,13 +10,9 @@ import PostModal from './Components/PostModal'
 export default function Feed() {
   const [posts, setPosts] = useState([])
   const [input, setInput] = useState('')
+  const [isPost, setPost] = useState(false)
+
   const navigate = useNavigate()
- /*  function reDirect(){
-
-
-  }
-}
-reDirect() */
 
 useEffect(() => {
   
@@ -55,15 +51,14 @@ useEffect(()=>{
     fetch(`${backendURL}/api/getpost/${userInfo.email}`, )
     .then(res => res.json())
     .then(data => {
-      //console.log('Posts fetched:', data)
+     
       setPosts(data)
     })
     
       console.log(posts)
   }
-  //getPosts() 
   
-  const isPost = false;
+
 
   const handlePost =  (e) => {
     e.preventDefault()
@@ -134,7 +129,7 @@ useEffect(()=>{
            <div className=" flex flex-col w-full h-full   space-y-4 overflow-y-scroll" id="feed" >
 
             { posts.length > 0 ? posts.map(post => (
-              <Post key={post._id} content={post.content} user={post.user} email={post.email} time={post.createdAt} postid={post._id} />
+              <Post key={post._id} content={post.content} user={post.user} email={post.email} time={post.createdAt} postid={post._id} setPost={setPost} />
             
               
             )) : <div className = 'flex w-1/2 rounded-3xl m-auto justify-center items-center p-4 bg-slate-300  '  >
@@ -144,7 +139,7 @@ useEffect(()=>{
         </div> }
         { isPost && <div className='flex flex-col w-full h-full' >
 
-          <PostModal />  
+          <PostModal setPost={setPost} />  
         </div>}
       </div>
     </div>

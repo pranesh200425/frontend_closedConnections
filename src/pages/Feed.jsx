@@ -63,7 +63,7 @@ useEffect(()=>{
   }
   //getPosts() 
   
-  const isPost = true;
+  const isPost = false;
 
   const handlePost =  (e) => {
     e.preventDefault()
@@ -89,15 +89,12 @@ useEffect(()=>{
   //getPosts()
   //console.log(posts)
 
+
   return (
-    <div className="flex  h-screen overflow-none bg-white w-[100%] ">
+    <div className="flex h-screen overflow-none bg-white w-[100%] ">
       {/* Sidebar for profile info */}
       <div className="md:flex flex-col items-center h-full w-[22%] bg-white p-6 shadow border-dotted border-r-2 border-gray-300  self-start">
-       {/*  <img
-          src={user.profilePic}
-          alt="Profile"
-          className="w-24 h-24 rounded-full mb-4 border-4 border-yellow-200 object-cover"
-        /> */}
+       
         <div className="text-2xl font-bold text-gray-700 mb-1">{user.username}</div>
         <div className="text-gray-500 mb-2 text-center">{user.bio}</div>
         <div className="flex flex-col gap-1 text-sm text-gray-600 w-full">
@@ -110,11 +107,10 @@ useEffect(()=>{
         </div>
       </div>
       {/* Main feed */}
-      <div className="w-[50%]  max-h-full border-dotted border-r-2 border-gray-300   ">
-{/*         <form
+      <div className="w-[50%]  h-full border-dotted pl-2 pr-2 border-r-2 border-gray-300   ">
+         { !isPost && <form
           onSubmit={handlePost}
-          className="bg-yellow-100 p-6 rounded-lg shadow border-dotted  border-yellow-300 mb-8"
-        >
+          className="bg-yellow-100 p-6 rounded-lg shadow border-dotted  border-yellow-300 ">
           
           <div className="flex gap-2">
             <input
@@ -132,22 +128,24 @@ useEffect(()=>{
               Post
             </button>
           </div>
-        </form>  */}
-        <div className=" flex flex-col h-full  space-y-4 overflow-y-scroll" id="feed" >
+        </form>   }
+        { !isPost && <div className=" flex w-full h-[85%]  "  >
 
-        <div className=" flex flex-col h-[80%]  space-y-4 overflow-y-scroll" id="feed" >
+           <div className=" flex flex-col w-full h-full   space-y-4 overflow-y-scroll" id="feed" >
 
-           {/* { posts.length > 0 ? posts.map(post => (
-            <Post key={post._id} content={post.content} user={post.user} email={post.email} time={post.createdAt} postid={post._id} />
-           
+            { posts.length > 0 ? posts.map(post => (
+              <Post key={post._id} content={post.content} user={post.user} email={post.email} time={post.createdAt} postid={post._id} />
             
-          )) : <div className = 'flex w-1/2 rounded-3xl m-auto justify-center items-center p-4 bg-slate-300  '  >
-        <h1 className = 'text-3xl' >Oops! No posts available</h1>  
-        </div> }   */}
+              
+            )) : <div className = 'flex w-1/2 rounded-3xl m-auto justify-center items-center p-4 bg-slate-300  '  >
+          <h1 className = 'text-3xl' >Oops! No posts available</h1>  
+          </div> }   
         </div>
+        </div> }
+        { isPost && <div className='flex flex-col w-full h-full' >
 
-        <PostModal /> 
-        </div>
+          <PostModal />  
+        </div>}
       </div>
     </div>
   )

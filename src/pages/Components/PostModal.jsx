@@ -4,7 +4,7 @@ import CommentModal from './CommentModal'
 
 function PostModal() {
   return (
-    <div className='flex flex-col w-full justify-end items-end max-h-full relative' >
+    <div className='flex flex-col w-full justify-end items-end h-full relative' >
         <div className="post flex flex-col sticky shadow-[0_2px_2px_rgba(0,0,0,0.15)] pr-2 pl-2 pb-2">
             <div className="post-data flex justify-between items-center  ">
                 <div className="username text-2xl">Example username</div>

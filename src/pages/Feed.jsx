@@ -52,7 +52,7 @@ useEffect(()=>{
   const backendURL = 'https://backend-closedconnections-tq1k.onrender.com'
 
   const getPosts = () => {
-    fetch(`${localURL}/api/getpost/${userInfo.email}`, )
+    fetch(`${backendURL}/api/getpost/${userInfo.email}`, )
     .then(res => res.json())
     .then(data => {
       //console.log('Posts fetched:', data)

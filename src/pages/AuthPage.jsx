@@ -20,7 +20,7 @@ function Login({ onSwitch }) {
 
   const handleSubmit = (e) => {
     e.preventDefault()
-    fetch(`http://localhost:5000/api/login`, {
+    fetch(`${backendURL}api/login`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ email, password })
@@ -98,7 +98,7 @@ function Signup({ onSwitch }) {
       alert('Passwords do not match!')
       return
     }
-    fetch(`${localURL}/api/signup`, {
+    fetch(`${backendURL}/api/signup`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ email, password })

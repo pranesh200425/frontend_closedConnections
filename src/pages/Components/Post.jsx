@@ -16,7 +16,7 @@ function Post({content, keey, email, time, postid}) {
   return (
     <div className="wrapper" key={keey} ref={ref} >
     {inView && (
-        <div  className='flex w-full flex-col rounded-2xl border-2 p-2 border-dotted border-gray-300' >
+        <div  className='flex w-full flex-col  border-b-2 p-2 border-dotted border-gray-300' >
         <div className="postMeta-data flex items-center justify-between mb-2">
             <h3 className='text-xl' >{email || 'user'}</h3>
             <span>options</span>
@@ -27,8 +27,8 @@ function Post({content, keey, email, time, postid}) {
             </p>
         </div>
         <div className="buttons flex mt-2  justify-around ">
-            <div><button className='flex justify-center rounded-[3rem] items-center bg-pink-300 pt-3 pb-3 pr-4 pl-4' >like</button></div>
-            <div><button className='flex bg-amber-200 justify-center items-center pt-3 pb-3 pr-4 pl-4' >comment</button></div>
+            <div><button className='flex justify-center rounded items-center font-bold ease-in-out duration-150 cursor-pointer text-pink-300 hover:text-gray-950 hover:bg-pink-300 pt-2 pb-2 pr-2 pl-2' >like</button></div>
+            <div><button className='flex text-amber-300 hover:text-amber-800 ease-in-out duration-150 rounded hover:bg-amber-200 justify-center items-center font-bold pt-2 pb-2 pr-2 pl-2' >comment</button></div>
             <div className='flex justify-end items-end' >
               <p className='text-end text-purple-400 text-sm' >{time}</p>
             </div>

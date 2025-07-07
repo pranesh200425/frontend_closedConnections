@@ -21,3 +21,9 @@ body {
   -ms-overflow-style: none;  /* IE and Edge */
   scrollbar-width: none;
 }
+
+#comments::-webkit-scrollbar {
+  display: none;
+  -ms-overflow-style: none;  /* IE and Edge */
+  scrollbar-width: none;
+}

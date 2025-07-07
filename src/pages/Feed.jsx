@@ -90,9 +90,9 @@ useEffect(()=>{
   //console.log(posts)
 
   return (
-    <div className="flex p-2 h-screen pt-4 overflow-none bg-white w-[100%] ">
+    <div className="flex  h-screen overflow-none bg-white w-[100%] ">
       {/* Sidebar for profile info */}
-      <div className="hidden md:flex flex-col items-center w-72 mr-8 bg-white p-6 rounded-lg shadow border-dotted border-2 border-gray-300 h-fit self-start">
+      <div className="md:flex flex-col items-center h-full w-[22%] bg-white p-6 shadow border-dotted border-r-2 border-gray-300  self-start">
        {/*  <img
           src={user.profilePic}
           alt="Profile"
@@ -110,10 +110,10 @@ useEffect(()=>{
         </div>
       </div>
       {/* Main feed */}
-      <div className="w-[50%] ">
-        <form
+      <div className="w-[50%]  max-h-full border-dotted border-r-2 border-gray-300   ">
+{/*         <form
           onSubmit={handlePost}
-          className="bg-yellow-100 p-6 rounded-lg shadow border-dotted border-2 border-yellow-300 mb-8"
+          className="bg-yellow-100 p-6 rounded-lg shadow border-dotted  border-yellow-300 mb-8"
         >
           
           <div className="flex gap-2">
@@ -132,17 +132,21 @@ useEffect(()=>{
               Post
             </button>
           </div>
-        </form>
-        <div className=" flex flex-col h-9/12 space-y-4 overflow-y-scroll" id="feed" >
-        
-          {/* { posts.length > 0 ? posts.map(post => (
+        </form>  */}
+        <div className=" flex flex-col h-full  space-y-4 overflow-y-scroll" id="feed" >
+
+        <div className=" flex flex-col h-[80%]  space-y-4 overflow-y-scroll" id="feed" >
+
+           {/* { posts.length > 0 ? posts.map(post => (
             <Post key={post._id} content={post.content} user={post.user} email={post.email} time={post.createdAt} postid={post._id} />
            
             
           )) : <div className = 'flex w-1/2 rounded-3xl m-auto justify-center items-center p-4 bg-slate-300  '  >
         <h1 className = 'text-3xl' >Oops! No posts available</h1>  
-        </div> }  */}
-        <PostModal />
+        </div> }   */}
+        </div>
+
+        <PostModal /> 
         </div>
       </div>
     </div>

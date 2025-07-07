@@ -102,7 +102,7 @@ function Signup({ onSwitch }) {
       alert('Passwords do not match!')
       return
     }
-    fetch(`${localURL}/api/signup`, {
+    fetch(`${backendURL}/api/signup`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ email, password })

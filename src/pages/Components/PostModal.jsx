@@ -4,9 +4,32 @@ import CommentModal from './CommentModal'
 
 function PostModal({ setPost }) {
 
+    const [input, setInput] = React.useState('')
+
+    function handleInput(e) {
+        e.preventDefault()
+        setInput(e.target.value)
+    }
+
     let postData = JSON.parse(localStorage.getItem('currentPost'))
     //console.log('postData:', postData);
     const postID = postData.postID;
+
+    async function postComment(){
+
+        try { 
+        const res =  await fetch(`http://localhost:5000/api/postcomment/${postID}`, {
+            method: 'POST', 
+            headers: { 'Content-Type' : 'application/json' },
+            body: JSON.stringify({ content: input, email: postData.email })
+        })
+        const data = await res.json()
+        console.log('Comment posted:', data)
+        setInput('')
+    } catch(err){
+        alert(err.message)
+    }
+}
 
 
   return (
@@ -37,8 +60,8 @@ function PostModal({ setPost }) {
 
         </div>
         <div className="comment-box flex items-center justify-center shadow-2xl shadow-black border-t-gray-300 w-full ">
-            <input type="text" className='flex w-[75%] p-3  outline-none ' placeholder="Write a comment..." />
-            <button className='flex w-[25%] justify-center h-full items-center hover:cursor-pointer tex-xl font-bold  bg-amber-100 hover:bg-amber-200 ease-in-out duration-300 transition-all border-2 ' >Post</button>
+            <input type="text" className='flex w-[75%] p-3  outline-none ' placeholder="Write a comment..." value={input} onChange={handleInput} />
+            <button className='flex w-[25%] justify-center h-full items-center hover:cursor-pointer tex-xl font-bold  bg-amber-100 hover:bg-amber-200 ease-in-out duration-300 transition-all border-2 ' onClick={postComment} >Post</button>
         </div>
     </div>
   )

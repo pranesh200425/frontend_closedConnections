@@ -30,7 +30,7 @@ let render = 0
 useEffect(()=>{
   getPosts()
   console.log("post fetched here")
-}, [render]) 
+}, []) 
 
   // Example user info
   const userInfo = JSON.parse(localStorage.getItem('userInfo'))
@@ -46,9 +46,10 @@ useEffect(()=>{
 
   const localURL = 'http://localhost:5000' 
   const backendURL = 'https://backend-closedconnections-tq1k.onrender.com'
+  console.log('logs here',userInfo)
 
   const getPosts = () => {
-    fetch(`${backendURL}/api/getpost/${userInfo.email}`, )
+    fetch(`${localURL}/api/getpost/${userInfo.email}`, )
     .then(res => res.json())
     .then(data => {
      
@@ -71,7 +72,6 @@ useEffect(()=>{
     .then(res => res.json())
     .then(data => {
       //console.log('Post created:', data)
-      render = 0 ? 1: 0
     })
     .catch(err => console.error('Error creating post:', err))
 
@@ -102,7 +102,7 @@ useEffect(()=>{
         </div>
       </div>
       {/* Main feed */}
-      <div className="w-[50%]  h-full border-dotted pl-2 pr-2 border-r-2 border-gray-300   ">
+      <div className="w-[50%]  h-full border-dotted border-r-2 border-gray-300   ">
          { !isPost && <form
           onSubmit={handlePost}
           className="bg-yellow-100 p-6 rounded-lg shadow border-dotted  border-yellow-300 ">

@@ -5,7 +5,7 @@ import CommentModal from './CommentModal'
 function PostModal({ setPost }) {
 
     const [input, setInput] = React.useState('')
-
+    const [comments, setComments] = React.useState([])
     function handleInput(e) {
         e.preventDefault()
         setInput(e.target.value)
@@ -14,6 +14,24 @@ function PostModal({ setPost }) {
     let postData = JSON.parse(localStorage.getItem('currentPost'))
     //console.log('postData:', postData);
     const postID = postData.postID;
+
+   // const comments = []
+
+    async function getComments(){
+        try {
+            const res = await fetch(`http://localhost:5000/api/getcomments/${postID}`, {
+                method : 'GET',
+                headers: { 'Content-Type' : 'application/json' }
+            })
+            const data = await res.json()
+            setComments(data)
+            //console.log('Comments fetched:', data);
+        } catch(err) {
+            console.error('Error fetching comments:', err);
+            alert(err.message)
+        }
+    }
+    getComments()
 
     async function postComment(){
 
@@ -31,7 +49,7 @@ function PostModal({ setPost }) {
     }
 }
 
-
+//console.log(comments)
   return (
     <div className='flex flex-col w-full justify-start items-end h-full relative' >
             <div className='flex w-full justify-start  ' onClick={() => {setPost(false)}} >
@@ -51,13 +69,17 @@ function PostModal({ setPost }) {
                 <div><button>likes</button></div>
             </div>
         </div>
-        <div className="comments flex flex-col  w-[92%] pr-4  overflow-y-scroll " id="comments">
-            <CommentModal />
-            <CommentModal />
-            <CommentModal />
-            <CommentModal />
-            <CommentModal />
-
+        <div className="comments flex flex-col min-h-[70%]  w-[92%] pr-4  overflow-y-scroll " id="comments">
+            {
+            comments.length > 0 ? comments.map(comment => (
+                <CommentModal content={comment.content} key={comment.createdAt} time={comment.createdAt} email={comment.email} />
+                //console.log(comment)
+            )) 
+             : <div className='flex flex-col items-center justify-center h-full w-full' >
+                <p className='text-3xl text-gray-400 text-center' >No comments yet! :\</p>
+             </div> 
+            }
+        
         </div>
         <div className="comment-box flex items-center justify-center shadow-2xl shadow-black border-t-gray-300 w-full ">
             <input type="text" className='flex w-[75%] p-3  outline-none ' placeholder="Write a comment..." value={input} onChange={handleInput} />

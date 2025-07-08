@@ -1,15 +1,15 @@
 import React from 'react'
 
-function CommentModal() {
+function CommentModal({email, content, time}) {
   return (
     <div className='flex flex-col mt-2 mb-2 ' >
       <div className="comment flex justify-between items-center mb-2">
-                <div className="username font-bold  text-amber-600 p-2 ">Example username</div>
-                <div className="time text-sm">2 hours ago</div>
+                <div className="username font-bold  text-amber-600 p-2 ">{email}</div>
+                <div className="time text-sm">{time}</div>
             </div>
             <div className="content flex mt-2 mb-2">
                 <p className='text-gray-400 leading-7 ' >
-                    Lorem ipsum dolor, sit amet consectetur adipisicing elit. Quisquam quibusdam voluptatum rem, veritatis quod obcaecati iure eius similique culpa unde? Placeat fugiat consequuntur in dignissimos at totam obcaecati nobis quia!
+                    {content}
                 </p>
             </div>
         <div>

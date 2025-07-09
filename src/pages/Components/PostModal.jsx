@@ -24,10 +24,11 @@ function PostModal({ setPost }) {
     const postID = postData.postID;
 
    // const comments = []
-
+    const localURL = 'http://localhost:5000' 
+    const backendURL = 'https://backend-closedconnections-tq1k.onrender.com'
     async function getComments(){
         try {
-            const res = await fetch(`http://localhost:5000/api/getcomments/${postID}`, {
+            const res = await fetch(`${backendURL}/api/getcomments/${postID}`, {
                 method : 'GET',
                 headers: { 'Content-Type' : 'application/json' }
             })
@@ -43,8 +44,6 @@ function PostModal({ setPost }) {
 
     async function postComment(){
             
-  const localURL = 'http://localhost:5000'
-  const backendURL = 'https://backend-closedconnections-tq1k.onrender.com'
         try { 
         const res =  await fetch(`${backendURL}/api/postcomment/${postID}`, {
             method: 'POST', 

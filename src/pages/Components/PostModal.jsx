@@ -23,7 +23,7 @@ function PostModal({ setPost }) {
     //console.log('postData:', postData);
     const postID = postData.postID;
 
-    const userinfo = JSON.parse(localstorage.getItem('userInfo'))
+    const userinfo = JSON.parse(localStorage.getItem('userInfo'))
    // const comments = []
     const localURL = 'http://localhost:5000' 
     const backendURL = 'https://backend-closedconnections-tq1k.onrender.com'
@@ -34,6 +34,7 @@ function PostModal({ setPost }) {
                 headers: { 'Content-Type' : 'application/json' }
             })
             const data = await res.json()
+           
             setComments(data)
             //console.log('Comments fetched:', data);
         } catch(err) {

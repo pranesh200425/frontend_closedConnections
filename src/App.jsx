@@ -4,6 +4,7 @@ import Login from './pages/AuthPage'
 import AuthPage from './pages/AuthPage'
 import Feed from './pages/Feed'
 import AppWrapper from './pages/AppWrapper'
+import { Analytics } from "@vercel/analytics/next"
 
 function App() {
 
@@ -12,11 +13,7 @@ function App() {
   return (
     <BrowserRouter>
       <Routes>
-        {/* {
-          isLoggedIn
-            ? <Route path="/" element={<Feed />} />
-            : <Redirect to = {<AuthPage />} />
-        } */}
+        <Analytics />
         <Route path="/" element={<AppWrapper />} />
         <Route index path="/Login" element={ <AuthPage/> } />
         <Route path="/Home" element={<Feed />} /> 

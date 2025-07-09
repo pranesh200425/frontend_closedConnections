@@ -23,6 +23,7 @@ function PostModal({ setPost }) {
     //console.log('postData:', postData);
     const postID = postData.postID;
 
+    const userinfo = JSON.parse(localstorage.getItem('userInfo'))
    // const comments = []
     const localURL = 'http://localhost:5000' 
     const backendURL = 'https://backend-closedconnections-tq1k.onrender.com'
@@ -48,7 +49,7 @@ function PostModal({ setPost }) {
         const res =  await fetch(`${backendURL}/api/postcomment/${postID}`, {
             method: 'POST', 
             headers: { 'Content-Type' : 'application/json' },
-            body: JSON.stringify({ content: input, email: postData.email })
+            body: JSON.stringify({ content: input, email: userinfo.email })
         })
         const data = await res.json()
         console.log('Comment posted:', data)

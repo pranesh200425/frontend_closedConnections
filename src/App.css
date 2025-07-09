@@ -27,3 +27,14 @@ body {
   -ms-overflow-style: none;  /* IE and Edge */
   scrollbar-width: none;
 }
+
+@media screen and (max-width: 501px) {
+  #sidebar {
+    display: none;
+  }
+
+  #hamMenu {
+    display: flex;
+  }
+
+}

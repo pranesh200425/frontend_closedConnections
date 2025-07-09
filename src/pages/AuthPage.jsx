@@ -18,13 +18,14 @@ function Login({ onSwitch }) {
 const isLoggedIn = localStorage.getItem('token') !== null
 
 let userInfo;
+  const navigate = useNavigate()
 
   const localURL = 'http://localhost:5000'
   const backendURL = 'https://backend-closedconnections-tq1k.onrender.com'
 
   const handleSubmit = (e) => {
     e.preventDefault()
-    fetch(`${backendURL}api/login`, {
+    fetch(`${backendURL}/api/login`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ email, password })

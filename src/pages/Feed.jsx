@@ -4,6 +4,8 @@ import Post from './Components/Post'
 import { useNavigate } from 'react-router-dom'
 import { useEffect } from 'react'
 import PostModal from './Components/PostModal'
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+import { faBars, faBackward } from '@fortawesome/free-solid-svg-icons'
 
 
 
@@ -22,6 +24,7 @@ useEffect(() => {
     console.log('Redirecting to login page...'); 
     console.log(isLoggedIn);
     navigate('/Login')
+    window.location.reload()
     }
 }, [navigate])
 
@@ -49,7 +52,7 @@ useEffect(()=>{
   console.log('logs here',userInfo)
 
   const getPosts = () => {
-    fetch(`${localURL}/api/getpost/${userInfo.email}`, )
+    fetch(`${backendURL}/api/getpost/${userInfo.email}`, )
     .then(res => res.json())
     .then(data => {
      
@@ -64,7 +67,7 @@ useEffect(()=>{
   const handlePost =  (e) => {
     e.preventDefault()
 
-     fetch(`${localURL}/api/post/${userInfo.email}`, {
+     fetch(`${backendURL}/api/post/${userInfo.email}`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ content: input })
@@ -84,33 +87,75 @@ useEffect(()=>{
   //getPosts()
   //console.log(posts)
 
+  function logout(){
+    localStorage.removeItem('token')
+    localStorage.removeItem('userInfo')
+    navigate('/Login')
+    window.location.reload()
+  }
+
+  const [isside, setSide] = useState(false)
 
   return (
-    <div className="flex h-screen overflow-none bg-white w-[100%] ">
+    <div className="flex h-screen overflow-none bg-white w-[100%] relative">
+      <div id='hamMenu' className='hidden p-4 absolute bottom-2.5 right-2.5 ' >
+        {
+          !isside && <div className='p-4 bg-gray-200 rounded-full' onClick={() => setSide(true)} >
+            <FontAwesomeIcon icon={faBars} />
+          </div>
+        }
+        {
+          isside && 
+          <div className='flex flex-col p-4  border border-dotted border-gray-300 rounded bg-gray-50 ease-in-out duration-200 ' >
+              <div className='flex  w-full items-center justify-end text-lg cursor-pointer font-semibold ' onClick={() => setSide(false)}  >
+                <FontAwesomeIcon icon={faBackward} />
+              </div>
+              <div className='flex p-2 w-full items-center justify-center text-xl font-semibold ' >
+                <h1>{userInfo.email}</h1>
+              </div>
+              <div>
+                <h1 className='pt-2 pb-2' >{user.bio}</h1>
+              </div>
+              <div>
+                <p className='pt-2 pb-2' >{user.posts}</p>
+              </div>
+              <div>
+                <p className='pt-2 pb-2' >{user.joined}</p>
+              </div>
+              <div className='flex w-full justify-start' >
+                <button className=' cursor-pointer mt-16 bg-gray-500 rounded p-3 text-white hover:bg-gray-300 hover:text-gray-700 font-bold duration-150 ease-in-out  pt-2 pb-2' onClick={logout} >Logout</button>
+              </div>
+          </div>
+        }
+      </div>
       {/* Sidebar for profile info */}
-      <div className="md:flex flex-col items-center h-full w-[22%] bg-white p-6 shadow border-dotted border-r-2 border-gray-300  self-start">
+      <div className="md:flex  flex-col items-start h-full md:w-[22%] w-11 bg-white p-6 shadow border-dotted border-r-2 border-gray-300  self-start" id="sidebar" >
        
-        <div className="text-2xl font-bold text-gray-700 mb-1">{user.username}</div>
+        <div className="text-2xl font-bold w-full mb-4 text-gray-700  ">{user.username}</div>
         <div className="text-gray-500 mb-2 text-center">{user.bio}</div>
         <div className="flex flex-col gap-1 text-sm text-gray-600 w-full">
           <div>
-            <span className="font-semibold">Posts:</span> {user.posts}
+            {/* <span className="font-semibold">Posts:</span> {user.posts} */}
+            <h1>{user.posts}</h1>
           </div>
           <div>
             <span className="font-semibold">Joined:</span> {user.joined}
           </div>
         </div>
+        <div>
+          <button className='flex cursor-pointer mt-16 bg-gray-500 rounded p-3 text-white hover:bg-gray-300 hover:text-gray-700 font-bold duration-150 ease-in-out  ' onClick={logout}>Log out</button>
+        </div>
       </div>
       {/* Main feed */}
-      <div className="w-[50%]  h-full border-dotted border-r-2 border-gray-300   ">
+      <div className="md:w-[50%] flex flex-col grow h-full border-dotted border-r-2 pr-2 pl-2 border-gray-300   ">
          { !isPost && <form
           onSubmit={handlePost}
-          className="bg-yellow-100 p-6 rounded-lg shadow border-dotted  border-yellow-300 ">
+          className=" pr-6 pl-6 pt-2 pb-2 rounded-lg shadow border-dotted bg-gray-100  border-yellow-300 ">
           
           <div className="flex gap-2">
             <input
               type="text"
-              className="flex-1 px-3 outline-none py-2 border-2 border-gray-300 border-dotted rounded-3xl "
+              className="flex-1 px-3 outline-none py-2 border-2 bg-white border-gray-300 border-dotted rounded-3xl "
               placeholder="What's on your mind?"
               value={input}
               onChange={e => setInput(e.target.value)}
@@ -118,7 +163,7 @@ useEffect(()=>{
             />
             <button
               type="submit"
-              className="border-2 border-dotted bg-white border-yellow-500 text-gray-500 px-4 py-2 hover:border-yellow-500 hover:bg-yellow-400 rounded-4xl hover:text-amber-50 transition"
+              className="border-2 border-dotted bg-white border-yellow-500 text-gray-500 px-4 py-2 hover:border-yellow-500 hover:bg-yellow-400 rounded-4xl hover:text-amber-50 font-semibold cursor-pointer transition"
             >
               Post
             </button>

@@ -4,16 +4,16 @@ import Login from './pages/AuthPage'
 import AuthPage from './pages/AuthPage'
 import Feed from './pages/Feed'
 import AppWrapper from './pages/AppWrapper'
-import { Analytics } from "@vercel/analytics/next"
 
 function App() {
 
   /* const isLoggedIn = localStorage.getItem('token') !== null
   console.log('isLoggedIn:', isLoggedIn) */
   return (
+    
+        
     <BrowserRouter>
       <Routes>
-        <Analytics />
         <Route path="/" element={<AppWrapper />} />
         <Route index path="/Login" element={ <AuthPage/> } />
         <Route path="/Home" element={<Feed />} /> 

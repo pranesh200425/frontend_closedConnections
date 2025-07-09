@@ -9,6 +9,7 @@ import { faBars, faBackward } from '@fortawesome/free-solid-svg-icons'
 
 
 
+
 export default function Feed() {
   const [posts, setPosts] = useState([])
   const [input, setInput] = useState('')

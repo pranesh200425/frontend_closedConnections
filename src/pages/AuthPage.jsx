@@ -2,6 +2,7 @@ import React, { useState } from 'react'
 import { useNavigate } from 'react-router'
 import '../index.css'
 import Feed from './Feed';
+import { Analytics } from '@vercel/analytics/react'
 
 function setLoginStat(){
   localStorage.setItem('token', 'true');
@@ -48,6 +49,7 @@ let userInfo;
       onSubmit={handleSubmit}
       className="bg-white p-6 rounded-lg shadow w-full max-w-sm border-dotted border-2 border-gray-300"
     >
+      <Analytics />
       <h2 className="text-4xl font-extrabold mb-5 text-gray-500 text-center">Login</h2>
       <div className="mb-4">
         <label className="text-xl mb-1 text-black">Email</label>

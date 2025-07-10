@@ -95,21 +95,23 @@ useEffect(()=>{
     navigate('/Login')
     window.location.reload()
   }
-
+  const style_sm = 'flex p-2 w-[90%] absolute top-2 bg-white font-semibold rounded-xl z-50 justify-center items-center p-3 border border-dotted'
   const [isside, setSide] = useState(false)
 
-
+  const style_md = 'flex w-[95%] text-xl pt-4 pb-4 pr-4 pl-2 font-semibold border-2 border-dotted border-black rounded-3xl mt-2 justify-end' 
   return (
-    <div className="flex h-screen overflow-none bg-white w-[100%] relative">
-      { !isPost && <div id='hamMenu' className='hidden p-4 absolute bottom-2.5 right-2.5 ' >
+    <div className="flex  items-center h-screen overflow-none bg-white w-[100%] pt-14 relative" id='main-feed'>
+       
+        <Nav  style={style_sm} />
+      { !isPost && <div id='hamMenu' className='hidden  absolute z-50  top-3 left-7 ' >
         {
-          !isside && <div className='p-4 bg-gray-200 rounded-full z-50 ' onClick={() => setSide(true)} >
+          !isside && <div className='p-3 rounded-2xl ' onClick={() => setSide(true)} >
             <FontAwesomeIcon icon={faBars} />
           </div>
         }
         {
           isside && 
-          <div className='flex flex-col p-4  z-50 border border-dotted border-gray-300 rounded bg-gray-50 ease-in-out duration-200 ' >
+          <div className='flex flex-col p-4  border border-dotted border-gray-300 rounded bg-gray-50 ease-in-out duration-200 ' >
               <div className='flex  w-full items-center justify-end text-lg cursor-pointer font-semibold ' onClick={() => setSide(false)}  >
                 <FontAwesomeIcon icon={faBackward} />
               </div>
@@ -133,7 +135,7 @@ useEffect(()=>{
       </div>}
       {/* Sidebar for profile info */}
       <div className="md:flex  flex-col items-start h-full md:w-[22%] w-11 bg-white p-6 shadow border-dotted border-r-2 border-gray-300  self-start" id="sidebar" >
-       <Nav />
+       <Nav style={style_md} />
         <div className="text-2xl font-bold w-full mt-4 mb-4 text-gray-700  ">{user.username}</div>
         <div className="text-gray-500 mb-2 text-center">{user.bio}</div>
         <div className="flex flex-col gap-1 text-sm text-gray-600 w-full">
@@ -150,11 +152,11 @@ useEffect(()=>{
         </div>
       </div>
       {/* Main feed */}
-      <div className="md:w-[50%] flex flex-col grow h-full border-dotted border-r-2 pr-2 pl-2 border-gray-300 relative">
-         { !isPost && <div className='flex w-full' /* id='postForm' */ >
+      <div className="md:w-[50%] flex w-full grow h-3/4 md:h-full border-dotted border-r-2 pr-2 pl-2 border-gray-300 relative">
+         { !isPost && <div className='flex w-[98%] absolute bottom-0' /* id='postForm' */ >
           <form
           onSubmit={handlePost}
-          className="flex pr-6 pl-6 pt-2 pb-2 rounded-lg w-full shadow border-dotted bg-gray-100  border-yellow-300 "
+          className="flex pr-6 pl-6 pt-2 pb-2 rounded-lg w-full shadow border-dotted bg-gray-100   border-yellow-300 "
           
           >
           <div className="flex w-full gap-2">

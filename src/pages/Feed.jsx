@@ -6,6 +6,7 @@ import { useEffect } from 'react'
 import PostModal from './Components/PostModal'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faBars, faBackward } from '@fortawesome/free-solid-svg-icons'
+import Nav from './Components/Nav'
 
 
 
@@ -97,17 +98,18 @@ useEffect(()=>{
 
   const [isside, setSide] = useState(false)
 
+
   return (
     <div className="flex h-screen overflow-none bg-white w-[100%] relative">
-      <div id='hamMenu' className='hidden p-4 absolute bottom-2.5 right-2.5 ' >
+      { !isPost && <div id='hamMenu' className='hidden p-4 absolute bottom-2.5 right-2.5 ' >
         {
-          !isside && <div className='p-4 bg-gray-200 rounded-full' onClick={() => setSide(true)} >
+          !isside && <div className='p-4 bg-gray-200 rounded-full z-50 ' onClick={() => setSide(true)} >
             <FontAwesomeIcon icon={faBars} />
           </div>
         }
         {
           isside && 
-          <div className='flex flex-col p-4  border border-dotted border-gray-300 rounded bg-gray-50 ease-in-out duration-200 ' >
+          <div className='flex flex-col p-4  z-50 border border-dotted border-gray-300 rounded bg-gray-50 ease-in-out duration-200 ' >
               <div className='flex  w-full items-center justify-end text-lg cursor-pointer font-semibold ' onClick={() => setSide(false)}  >
                 <FontAwesomeIcon icon={faBackward} />
               </div>
@@ -128,11 +130,11 @@ useEffect(()=>{
               </div>
           </div>
         }
-      </div>
+      </div>}
       {/* Sidebar for profile info */}
       <div className="md:flex  flex-col items-start h-full md:w-[22%] w-11 bg-white p-6 shadow border-dotted border-r-2 border-gray-300  self-start" id="sidebar" >
-       
-        <div className="text-2xl font-bold w-full mb-4 text-gray-700  ">{user.username}</div>
+       <Nav />
+        <div className="text-2xl font-bold w-full mt-4 mb-4 text-gray-700  ">{user.username}</div>
         <div className="text-gray-500 mb-2 text-center">{user.bio}</div>
         <div className="flex flex-col gap-1 text-sm text-gray-600 w-full">
           <div>
@@ -148,12 +150,14 @@ useEffect(()=>{
         </div>
       </div>
       {/* Main feed */}
-      <div className="md:w-[50%] flex flex-col grow h-full border-dotted border-r-2 pr-2 pl-2 border-gray-300   ">
-         { !isPost && <form
+      <div className="md:w-[50%] flex flex-col grow h-full border-dotted border-r-2 pr-2 pl-2 border-gray-300 relative">
+         { !isPost && <div className='flex w-full' /* id='postForm' */ >
+          <form
           onSubmit={handlePost}
-          className=" pr-6 pl-6 pt-2 pb-2 rounded-lg shadow border-dotted bg-gray-100  border-yellow-300 ">
+          className="flex pr-6 pl-6 pt-2 pb-2 rounded-lg w-full shadow border-dotted bg-gray-100  border-yellow-300 "
           
-          <div className="flex gap-2">
+          >
+          <div className="flex w-full gap-2">
             <input
               type="text"
               className="flex-1 px-3 outline-none py-2 border-2 bg-white border-gray-300 border-dotted rounded-3xl "
@@ -169,7 +173,8 @@ useEffect(()=>{
               Post
             </button>
           </div>
-        </form>   }
+        </form>  
+         </div> }
         { !isPost && <div className=" flex w-full h-[85%]  "  >
 
            <div className=" flex flex-col w-full h-full   space-y-4 overflow-y-scroll" id="feed" >

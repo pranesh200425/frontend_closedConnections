@@ -1,48 +1,58 @@
-import React, { useState } from 'react'
-import { useNavigate } from 'react-router'
-import '../index.css'
-import Feed from './Feed';
-import { Analytics } from '@vercel/analytics/react'
+import React, { useState } from "react";
+import { useNavigate } from "react-router-dom";
+import "../index.css";
+import Feed from "./Feed";
+import { Analytics } from "@vercel/analytics/react";
+import { supabase } from "../../supa_auth.js";
 
-function setLoginStat(){
-  localStorage.setItem('token', 'true');
+function setLoginStat() {
+  localStorage.setItem("token", "true");
 }
 
-
-
-
 function Login({ onSwitch }) {
-  const [email, setEmail] = useState('')
-  const [password, setPassword] = useState('')
- 
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
 
-const isLoggedIn = localStorage.getItem('token') !== null
+  const isLoggedIn = localStorage.getItem("token") !== null;
 
-let userInfo;
-  const navigate = useNavigate()
+  let userInfo;
+  const navigate = useNavigate();
 
-  const localURL = 'http://localhost:5000'
-  const backendURL = 'https://backend-closedconnections-tq1k.onrender.com'
+  const localURL = "http://localhost:5000";
+  const backendURL = "https://backend-closedconnections-tq1k.onrender.com";
 
-  const handleSubmit = (e) => {
-    e.preventDefault()
+  const handleSubmit = async (e) => {
+    console.log("before preventDefault");
+  e.preventDefault();
+  console.log("after preventDefault");
+    
+    /* 
     fetch(`${backendURL}/api/login`, {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ email, password })
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ email, password }),
     })
-      .then(res => res.json())
-      .then(data => { 
+      .then((res) => res.json())
+      .then((data) => {
         alert(data.message);
-        if(data.message === 'Login successful') {
-          userInfo = { email }
-          localStorage.setItem('userInfo', JSON.stringify(userInfo))
-          navigate('/Home')
+        if (data.message === "Login successful") {
+          userInfo = { email };
+          localStorage.setItem("userInfo", JSON.stringify(userInfo));
+          navigate("/Home");
         }
-        setLoginStat()
+        setLoginStat();
       })
-      .catch(err => alert( err.message))
-  }
+      .catch((err) => alert(err.message)); */
+    const { data, error } = await supabase.auth.signInWithPassword({
+      email: email,
+      password: password,
+    });
+    if (data) {
+      console.log(data);
+      navigate("/Home");
+    }
+    if (error) console.log(error);
+  };
 
   return (
     <form
@@ -50,14 +60,16 @@ let userInfo;
       className="bg-white p-6 rounded-lg shadow w-full max-w-sm border-dotted border-2 border-gray-300"
     >
       <Analytics />
-      <h2 className="text-4xl font-extrabold mb-5 text-gray-500 text-center">Login</h2>
+      <h2 className="text-4xl font-extrabold mb-5 text-gray-500 text-center">
+        Login
+      </h2>
       <div className="mb-4">
         <label className="text-xl mb-1 text-black">Email</label>
         <input
           type="email"
           className="w-full px-3 py-2 border-2 border-gray-300 border-dotted rounded focus:outline-none focus:ring focus:border-blue-400"
           value={email}
-          onChange={e => setEmail(e.target.value)}
+          onChange={(e) => setEmail(e.target.value)}
           required
         />
       </div>
@@ -67,7 +79,7 @@ let userInfo;
           type="password"
           className="w-full px-3 py-2 border-2 border-gray-300 rounded border-dotted focus:outline-none focus:ring focus:border-blue-400"
           value={password}
-          onChange={e => setPassword(e.target.value)}
+          onChange={(e) => setPassword(e.target.value)}
           required
         />
       </div>
@@ -78,7 +90,7 @@ let userInfo;
         Login
       </button>
       <p className="mt-4 text-center text-sm text-gray-600">
-        Don't have an account?{' '}
+        Don't have an account?{" "}
         <button
           type="button"
           className="text-blue-600 underline"
@@ -88,19 +100,22 @@ let userInfo;
         </button>
       </p>
     </form>
-  )
+  );
 }
 
 function Signup({ onSwitch }) {
-  const [email, setEmail] = useState('')
-  const [password, setPassword] = useState('')
-  const [confirmPassword, setConfirmPassword] = useState('')
-  const navigate = useNavigate()
-  const localURL = 'http://localhost:5000'
-  const backendURL = 'https://backend-closedconnections-tq1k.onrender.com'
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [confirmPassword, setConfirmPassword] = useState("");
+  const [username, setUsername] = useState("");
 
-  const handleSubmit = (e) => {
+  const navigate = useNavigate();
+  const localURL = "http://localhost:5000";
+  const backendURL = "https://backend-closedconnections-tq1k.onrender.com";
+
+  const handleSubmit = async (e) => {
     e.preventDefault()
+    /* e.preventDefault()
     if (password !== confirmPassword) {
       alert('Passwords do not match!')
       return
@@ -108,36 +123,66 @@ function Signup({ onSwitch }) {
     fetch(`${backendURL}/api/signup`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ email, password })
+      body: JSON.stringify({ email, password, username })
     })
       .then(res => res.json())
       .then(data => { 
         alert(data.message) 
         if(data.message === 'Signup successful') {
           //return <Feed />
-          let userInfo = { email }
+          let userInfo = { email, username }
           localStorage.setItem('userInfo', JSON.stringify(userInfo))
           navigate('/Home')
         }
         setLoginStat()
       })
-      .catch(err => alert(err.message))
-  }
+      .catch(err => alert(err.message)) */
+    let message = "";
+    const { data, error } = await supabase.auth.signUp({
+      email: email,
+      password: password,
+      options: {
+        data: {
+          username: username,
+        },
+      },
+    });
+    const { data: loginData, error: loginError } = await supabase.auth.signInWithPassword({
+    email,
+    password
+  });
+    if (error) console.log("error", error);
+    if (data) {
+      console.log(data);
+      navigate("/Home");
+    }
+  };
 
-  
   return (
     <form
       onSubmit={handleSubmit}
       className="bg-white p-6 rounded-lg shadow w-full max-w-sm border-dotted border-2 border-gray-300"
     >
-      <h2 className="text-4xl font-extrabold mb-5 text-gray-500 text-center">Sign Up</h2>
+      <h2 className="text-4xl font-extrabold mb-5 text-gray-500 text-center">
+        Sign Up
+      </h2>
       <div className="mb-4">
         <label className="text-xl mb-1 text-black">Email</label>
         <input
           type="email"
           className="w-full px-3 py-2 border-2 border-gray-300 border-dotted rounded focus:outline-none focus:ring focus:border-blue-400"
           value={email}
-          onChange={e => setEmail(e.target.value)}
+          onChange={(e) => setEmail(e.target.value)}
+          required
+        />
+      </div>
+      <div className="mb-4">
+        <label className="text-xl mb-1 text-black">Username</label>
+        <input
+          type="text"
+          className="w-full px-3 py-2 border-2 border-gray-300 rounded border-dotted focus:outline-none focus:ring focus:border-blue-400"
+          value={username}
+          onChange={(e) => setUsername(e.target.value)}
           required
         />
       </div>
@@ -147,7 +192,7 @@ function Signup({ onSwitch }) {
           type="password"
           className="w-full px-3 py-2 border-2 border-gray-300 rounded border-dotted focus:outline-none focus:ring focus:border-blue-400"
           value={password}
-          onChange={e => setPassword(e.target.value)}
+          onChange={(e) => setPassword(e.target.value)}
           required
         />
       </div>
@@ -157,7 +202,7 @@ function Signup({ onSwitch }) {
           type="password"
           className="w-full px-3 py-2 border-2 border-gray-300 rounded border-dotted focus:outline-none focus:ring focus:border-blue-400"
           value={confirmPassword}
-          onChange={e => setConfirmPassword(e.target.value)}
+          onChange={(e) => setConfirmPassword(e.target.value)}
           required
         />
       </div>
@@ -168,7 +213,7 @@ function Signup({ onSwitch }) {
         Sign Up
       </button>
       <p className="mt-4 text-center text-sm text-gray-600">
-        Already have an account?{' '}
+        Already have an account?{" "}
         <button
           type="button"
           className="text-blue-600 underline"
@@ -178,11 +223,11 @@ function Signup({ onSwitch }) {
         </button>
       </p>
     </form>
-  )
+  );
 }
 
 export default function AuthPage() {
-  const [showLogin, setShowLogin] = useState(true)
+  const [showLogin, setShowLogin] = useState(true);
 
   return (
     <div className="flex items-center justify-center min-h-screen bg-white">
@@ -192,5 +237,5 @@ export default function AuthPage() {
         <Signup onSwitch={() => setShowLogin(true)} />
       )}
     </div>
-  )
+  );
 }

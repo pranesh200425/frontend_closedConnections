@@ -16,14 +16,18 @@
     "@fortawesome/free-regular-svg-icons": "^6.7.2",
     "@fortawesome/free-solid-svg-icons": "^6.7.2",
     "@fortawesome/react-fontawesome": "^0.2.2",
+    "@supabase/supabase-js": "^2.50.5",
     "@tailwindcss/vite": "^4.1.10",
     "@vercel/analytics": "^1.5.0",
+    "config": "^4.0.0",
     "D": "^1.0.0",
+    "dotenv": "^17.2.0",
     "react": "^19.1.0",
     "react-dom": "^19.1.0",
     "react-intersection-observer": "^9.16.0",
     "react-router": "^7.6.2",
-    "react-router-dom": "^7.6.2"
+    "react-router-dom": "^7.6.2",
+    "require": "^2.4.20"
   },
   "devDependencies": {
     "@eslint/js": "^9.25.0",

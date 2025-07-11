@@ -1,4 +1,3 @@
-// backend/server.js
 require('dotenv').config()
 const express = require('express')
 const cors = require('cors')
@@ -17,7 +16,6 @@ mongoose.connect(mangoURI, {
 
 
 let gID = 0;
-//let groupID = 0;
 
 const groupschema = new mongoose.Schema({
   group_ID: { type: Number, required: true },
@@ -35,7 +33,7 @@ app.post('/api/signup', async (req, res) => {
     const group = await Group.findOne({group_ID: gID})
     if(!group){
       const group = await Group.create({ group_ID, members: 0 });
-      await User.create({ email, password, groupID : group.group_ID })
+      await User.create({ email, password,username, groupID : group.group_ID })
       //group.json()
       group.members += 1;
       await group.save();
@@ -45,7 +43,7 @@ app.post('/api/signup', async (req, res) => {
       
       gID += 1;
       const group = await Group.create({ group_ID, members: 0 });
-      await User.create({ email, password,  groupID : group.group_ID })
+      await User.create({ email, password, username,  groupID : group.group_ID })
      
       group.members += 1;
       await group.save();
@@ -54,7 +52,7 @@ app.post('/api/signup', async (req, res) => {
     } else {
       group.members += 1;
       await group.save()
-      await User.create({ email, password,  groupID : group.group_ID })
+      await User.create({ email, password, username,  groupID : group.group_ID })
       return res.json({ message: 'Signup successful' })
     }
   } catch (err) {
@@ -141,7 +139,7 @@ app.get('/api/getcomments/:postID', async (req, res) => {
     if (!post) {
       return res.status(404).json({ message: 'Post not found' })
     }
-    console.log(post.comments)
+    //console.log(post.comments)
     res.json(post.comments)
   } catch (err) {
     console.log(err.message)
@@ -155,6 +153,7 @@ app.listen(5000, () => console.log('Backend running on http://localhost:5000'))
 const userSchema = new mongoose.Schema({
   email: { type: String, unique: true },
   password: String,
+  username: String,
   groupID: { type: Number, required: true },
 })
 

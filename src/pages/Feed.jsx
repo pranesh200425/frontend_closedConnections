@@ -46,15 +46,22 @@ if(!userInfo)
   const backendURL = "https://backend-closedconnections-tq1k.onrender.com";
   /*   console.log('logs here',userInfo) */
 
-  const getPosts = () => {
-    fetch(`${backendURL}/api/getpost/${userdata.email}`, )
-    .then(res => res.json())
+  const getPosts = async () => {
+
+   try {
+    const res =  await fetch(`${backendURL}/api/getpost/${userdata.email}`, )
+    /* .then(res => res.json())
     .then(data => {
       
       setPosts(data)
-    })
+    }) */
+    await res.json()
+    console.log(res)
+  } catch(error){
+    console.log('error fetching posts')
+  }
     
-    console.log(posts)
+   // console.log(posts)
   } 
 
   /*  useEffect(()=>{
@@ -90,16 +97,18 @@ if(!userInfo)
       const {
         data: { user },
       } = await supabase.auth.getUser();
-      console.log(user.user_metadata);
+      //console.log(user.user_metadata);
 
       setuserdata(user.user_metadata);
-      console.log(userdata);
+      //console.log(userdata);
     }
     getUser();
+    getPosts()
   }, []);
 
   useEffect(() => {
-    console.log("Updated userdata:", userdata);
+    //console.log("Updated userdata:", userdata);
+    getPosts()
   }, [userdata]);
 
 
@@ -107,7 +116,6 @@ if(!userInfo)
     e.preventDefault()
     const { error } = await supabase.auth.signOut()
     navigate("/Login");
-
   }
 
  /*  function logout() {

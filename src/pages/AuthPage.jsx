@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import "../index.css";
 import Feed from "./Feed";
@@ -12,6 +12,7 @@ function setLoginStat() {
 function Login({ onSwitch }) {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [message, setMessage] = useState("");
 
   const isLoggedIn = localStorage.getItem("token") !== null;
 
@@ -22,36 +23,22 @@ function Login({ onSwitch }) {
   const backendURL = "https://backend-closedconnections-tq1k.onrender.com";
 
   const handleSubmit = async (e) => {
-    console.log("before preventDefault");
-  e.preventDefault();
-  console.log("after preventDefault");
-    
-    /* 
-    fetch(`${backendURL}/api/login`, {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ email, password }),
-    })
-      .then((res) => res.json())
-      .then((data) => {
-        alert(data.message);
-        if (data.message === "Login successful") {
-          userInfo = { email };
-          localStorage.setItem("userInfo", JSON.stringify(userInfo));
-          navigate("/Home");
-        }
-        setLoginStat();
-      })
-      .catch((err) => alert(err.message)); */
+    //console.log("before preventDefault");
+    e.preventDefault();
     const { data, error } = await supabase.auth.signInWithPassword({
       email: email,
       password: password,
     });
-    if (data) {
-      console.log(data);
-      navigate("/Home");
+    // console.log(data)
+    if (data && !error) {
+      //console.log(data);
+      return navigate("/Home");
     }
-    if (error) console.log(error);
+    if (error) {
+      setMessage("");
+     // console.log(error.message);
+      setMessage(error.message);
+    }
   };
 
   return (
@@ -83,6 +70,11 @@ function Login({ onSwitch }) {
           required
         />
       </div>
+      {message && (
+        <p className="flex w-full justify-center items-center text-red-500 p-2 font-semibold">
+          {message}
+        </p>
+      )}
       <button
         type="submit"
         className="w-full border-2 border-dotted border-purple-700 text-gray-500 py-2 rounded hover:border-purple-900 hover:bg-purple-400 hover:text-amber-50 transition"
@@ -108,54 +100,86 @@ function Signup({ onSwitch }) {
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
   const [username, setUsername] = useState("");
+  const [message, setMessage] = useState("");
 
   const navigate = useNavigate();
   const localURL = "http://localhost:5000";
   const backendURL = "https://backend-closedconnections-tq1k.onrender.com";
 
   const handleSubmit = async (e) => {
-    e.preventDefault()
-    /* e.preventDefault()
-    if (password !== confirmPassword) {
-      alert('Passwords do not match!')
-      return
-    }
-    fetch(`${backendURL}/api/signup`, {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ email, password, username })
-    })
-      .then(res => res.json())
-      .then(data => { 
-        alert(data.message) 
-        if(data.message === 'Signup successful') {
-          //return <Feed />
-          let userInfo = { email, username }
-          localStorage.setItem('userInfo', JSON.stringify(userInfo))
-          navigate('/Home')
-        }
-        setLoginStat()
-      })
-      .catch(err => alert(err.message)) */
-    let message = "";
+    e.preventDefault();
+    
+
     const { data, error } = await supabase.auth.signUp({
       email: email,
       password: password,
       options: {
         data: {
           username: username,
+          group: null,
         },
       },
     });
-    const { data: loginData, error: loginError } = await supabase.auth.signInWithPassword({
-    email,
-    password
-  });
-    if (error) console.log("error", error);
-    if (data) {
-      console.log(data);
-      navigate("/Home");
+    if (error) return setMessage(error.message);
+    else setMessage("Account created successfully");
+
+    const { data: currentGroupData, error: currentGroupError } = await supabase
+      .from("group_pointer")
+      .select("")
+      .eq("id", 1);
+    const current_group = currentGroupData[0].current_group;
+    //console.log(currentGroupData[0].current_group, currentGroupError);
+
+    const { data: groupdata, error: grouperror } = await supabase
+      .from("groups")
+      .select("")
+      .eq("group_ID", current_group);
+    let group_members = groupdata[0].members;
+    console.log(group_members);
+    let usergroup;
+    if (group_members < 100) {
+      const { data, error } = await supabase
+        .from("groups")
+        .update({ members: group_members + 1 })
+        .eq("group_ID", current_group);
+      usergroup = current_group;
+      const { data: userData, error: userError } =
+        await supabase.auth.updateUser({
+          data: {
+            group: usergroup,
+          },
+        });
+      //console.log(userData, userError);
+    } else {
+      const { error } = await supabase
+        .from("groups")
+        .insert({ group_ID: current_group + 1, members: 0 })
+        .select();
+     // console.log(error);
+      // console.log("new group created");
+
+      const { data, error: creategrouperror } = await supabase
+        .from("group_pointer")
+        .update({ current_group: current_group + 1 })
+        .eq("id", 1)
+        .select();
+      usergroup = current_group + 1;
+      const { data: userData, error: userError } =
+        await supabase.auth.updateUser({
+          data: {
+            group: usergroup,
+          },
+        });
+      //console.log(userData, userError);
     }
+
+    const { data: loginData, error: loginError } =
+      await supabase.auth.signInWithPassword({
+        email,
+        password,
+      });
+    navigate("/Home");
+    
   };
 
   return (
@@ -206,6 +230,11 @@ function Signup({ onSwitch }) {
           required
         />
       </div>
+      {message && (
+        <p className="flex w-full justify-center items-center text-red-500 p-2 font-semibold">
+          {message}
+        </p>
+      )}
       <button
         type="submit"
         className="w-full border-2 border-dotted border-purple-700 text-gray-500 py-2 rounded hover:border-purple-900 hover:bg-purple-400 hover:text-amber-50 transition"

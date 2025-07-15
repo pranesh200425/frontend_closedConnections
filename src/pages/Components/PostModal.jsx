@@ -8,12 +8,13 @@ import { useEffect } from 'react'
 
 function PostModal({ setPost }) {
     
-    useEffect(() => {
-        getComments()
-    }, [])
+ /*    useEffect(() => {
+        //getComments()
+    }, []) */
     
     const [input, setInput] = React.useState('')
     const [comments, setComments] = React.useState([])
+    /* 
     function handleInput(e) {
         e.preventDefault()
         setInput(e.target.value)
@@ -58,7 +59,7 @@ function PostModal({ setPost }) {
     } catch(err){
         alert(err.message)
     }
-}
+} */
 
 function handleEnter(e) {
     e.preventDefault()
@@ -80,12 +81,12 @@ function handleEnter(e) {
             </div>
         <div className="post flex flex-col w-full sticky shadow-[0_2px_2px_rgba(0,0,0,0.15)] pr-2 pl-2 pb-2">
             <div className="post-data flex justify-between items-center  ">
-                <div className="username flex text-xl">{postData.email}</div>
-                <div className="time">{postData.time}</div>
+                <div className="username flex text-xl">{/* {postData.email} */}dsff</div>
+                <div className="time">{/* {postData.time} */}</div>
             </div>
             <div className="content flex mt-2 mb-2">
                 <p className='text-gray-400 leading-7 ' >
-                    {postData.content}
+                   {/*  {postData.content} */}
                 </p>
             </div>
             <div className="other flex justify-between items-center ">
@@ -93,7 +94,7 @@ function handleEnter(e) {
             </div>
         </div>
         <div className="comments flex flex-col flex-11/12  w-[92%] pr-4  overflow-y-scroll " id="comments">
-            {
+           {/*  {
             comments.length > 0 ? comments.map(comment => (
                 <CommentModal content={comment.content} key={comment.createdAt} time={comment.createdAt} email={comment.email} />
                 //console.log(comment)
@@ -101,12 +102,12 @@ function handleEnter(e) {
              : <div className='flex flex-col items-center justify-center h-full w-full' >
                 <p className='text-3xl text-gray-400 text-center' >No comments yet! :\</p>
              </div> 
-            }
+            } */}
         
         </div>
         <div className="comment-box flex items-center justify-center shadow-2xl shadow-black border-t-gray-300 w-full ">
-            <input type="text" className='flex w-[75%] p-3  outline-none ' placeholder="Write a comment..." value={input} onChange={handleInput} /* onKeyDown={(e) => handleEnter(e)} */ />
-            <button className='flex w-[25%] justify-center h-full items-center hover:cursor-pointer tex-xl font-bold  bg-amber-100 hover:bg-amber-200 ease-in-out duration-300 transition-all border-2 '  onClick={postComment} >Post</button>
+            <input type="text" className='flex w-[75%] p-3  outline-none ' placeholder="Write a comment..." value={input} /* onChange={handleInput}  *//* onKeyDown={(e) => handleEnter(e)} */ />
+            <button className='flex w-[25%] justify-center h-full items-center hover:cursor-pointer tex-xl font-bold  bg-amber-100 hover:bg-amber-200 ease-in-out duration-300 transition-all border-2 '  /* onClick={postComment} */ >Post</button>
         </div>
     </div>
   )

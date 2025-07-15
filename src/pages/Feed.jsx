@@ -29,11 +29,6 @@ export default function Feed() {
 }, [navigate]) */
 
   let render = 0;
-
-  // Example user info
-  /* const userInfo = JSON.parse(localStorage.getItem('userInfo'))
-if(!userInfo)
-  return null */
   const user = {
     username: "userInfo.email",
     profilePic: "https://ui-avatars.com/api/?name=You&background=random",
@@ -44,86 +39,64 @@ if(!userInfo)
 
   const localURL = "http://localhost:5000";
   const backendURL = "https://backend-closedconnections-tq1k.onrender.com";
-  /*   console.log('logs here',userInfo) */
 
   const getPosts = async () => {
-
-   try {
-    const res =  await fetch(`${backendURL}/api/getpost/${userdata.email}`, )
-    /* .then(res => res.json())
-    .then(data => {
-      
+    try {
+      const { data , error } = await supabase
+      .from('posts')
+      .select('*')
+      .eq('group', 0)
+      console.log(data, error);
       setPosts(data)
-    }) */
-    await res.json()
-    console.log(res)
-  } catch(error){
-    console.log('error fetching posts')
-  }
-    
-   // console.log(posts)
-  } 
+    } catch (error) {
+      console.log("error fetching posts");
+    }
+  };
 
   /*  useEffect(()=>{
     getPosts()
     console.log("post fetched here")
   }, [])  */
 
-   const handlePost =  (e) => {
-    e.preventDefault()
+  const handlePost = async (e) => {
+    e.preventDefault();
 
-     fetch(`${backendURL}/api/post/${userdata.email}`, {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ content: input })
-    })
-    .then(res => res.json())
-    .then(data => {
-      //console.log('Post created:', data)
-    })
-    .catch(err => console.error('Error creating post:', err))
+    if (input.trim() === "") return;
+    const { data, error } = await supabase.from("posts").insert({
+      username: userdata.username,
+      content: input,
+      likes: 0,
+      comments: [],
+      group : userdata.group
+    });
+    console.log(data, error);
 
-    if (input.trim() === '') return
-    
-    getPosts()
-    setInput('')
-  } 
-  //console.log('renders')
-  //getPosts()
-  //console.log(posts)
+    setInput("");
+  };
 
   useEffect(() => {
     async function getUser() {
       const {
         data: { user },
       } = await supabase.auth.getUser();
-      //console.log(user.user_metadata);
 
       setuserdata(user.user_metadata);
-      //console.log(userdata);
     }
     getUser();
-    getPosts()
+    getPosts();
   }, []);
 
-  useEffect(() => {
+  /* useEffect(() => {
     //console.log("Updated userdata:", userdata);
-    getPosts()
-  }, [userdata]);
-
+    getPosts();
+  }, [userdata]); */
 
   const singout = async (e) => {
-    e.preventDefault()
-    const { error } = await supabase.auth.signOut()
+    e.preventDefault();
+    const { error } = await supabase.auth.signOut();
     navigate("/Login");
-  }
+  };
 
- /*  function logout() {
-    localStorage.removeItem("token");
-    localStorage.removeItem("userInfo");
-    navigate("/Login");
-    window.location.reload();
-  } */
   const style_sm =
     "flex p-2 w-[90%] absolute top-2 bg-white font-semibold rounded-xl z-50 justify-center items-center p-3 border border-dotted";
   const [isside, setSide] = useState(false);
@@ -220,6 +193,7 @@ if(!userInfo)
                 <button
                   type="submit"
                   className="border-2 border-dotted bg-white border-yellow-500 text-gray-500 px-4 py-2 hover:border-yellow-500 hover:bg-yellow-400 rounded-4xl hover:text-amber-50 font-semibold cursor-pointer transition"
+                  onClick={handlePost}
                 >
                   Post
                 </button>
@@ -236,13 +210,15 @@ if(!userInfo)
               {posts.length > 0 ? (
                 posts.map((post) => (
                   <Post
-                    key={post._id}
+                    key={post.id}
                     content={post.content}
-                    user={post.user}
+                    user={post.username}
                     email={post.email}
-                    time={post.createdAt}
-                    postid={post._id}
+                    time={post.created_at}
+                    postid={post.id}
                     setPost={setPost}
+                    likes={post.likes}
+                    comments={post.comments.length}
                   />
                 ))
               ) : (

@@ -5,6 +5,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faBackward, faHeart } from '@fortawesome/free-solid-svg-icons'
 import { useEffect } from 'react'
 import { formatTime } from './Post'
+import { supabase } from '../../../supa_auth'
 
 function PostModal({ setPost }) {
 
@@ -18,10 +19,22 @@ function handleEnter(e) {
     if (e.key === 'Enter') {
         if (input.trim() === '') return
         postComment()
-        getComments()
         setInput('')
     }
 }
+
+const getComments = async () => {
+    const {data, error} = await supabase
+    .from('posts')
+    .select('comments')
+    .eq('id', postData.postid)
+    setComments(data)
+    console.log(data, error);
+}
+
+useEffect(()=> {
+    getComments()
+}, [])
 //console.log(postData);
 
   return (
@@ -47,15 +60,15 @@ function handleEnter(e) {
             </div>
         </div>
         <div className="comments flex flex-col flex-11/12  w-[92%] pr-4  overflow-y-scroll " id="comments">
-           {/*  {
+            {
             comments.length > 0 ? comments.map(comment => (
-                <CommentModal content={comment.content} key={comment.createdAt} time={comment.createdAt} email={comment.email} />
+                <CommentModal content={comment[0]} key={comment.createdAt} time={comment.createdAt} email={comment.email} />
                 //console.log(comment)
             )) 
              : <div className='flex flex-col items-center justify-center h-full w-full' >
                 <p className='text-3xl text-gray-400 text-center' >No comments yet! :\</p>
              </div> 
-            } */}
+            } 
         
         </div>
         <div className="comment-box flex items-center justify-center shadow-2xl shadow-black border-t-gray-300 w-full ">

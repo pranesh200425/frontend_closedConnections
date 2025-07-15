@@ -5,6 +5,57 @@ import {
   faComment,
   faEllipsisVertical,
 } from "@fortawesome/free-solid-svg-icons";
+import { supabase } from "../../../supa_auth";
+import { useEffect, useState } from "react";
+
+export const formatTime = (time) => {
+  const months = [
+    "January",
+    "February",
+    "March",
+    "April",
+    "May",
+    "June",
+    "July",
+    "August",
+    "September",
+    "October",
+    "November",
+    "December",
+  ];
+  const currentDate = new Date();
+  const currentYear = currentDate.getFullYear();
+  const currentMonth = currentDate.getMonth();
+  const currentDay = currentDate.getDate();
+  const currentHour = currentDate.getHours();
+  const currentMinute = currentDate.getMinutes();
+  const currentSecond = currentDate.getSeconds();
+  //const currentTime = currentDate.getTime()
+
+  const postDate = new Date(time);
+  const postYear = postDate.getFullYear();
+  const postMonth = postDate.getMonth();
+  const postDay = postDate.getDate();
+  const postHour = postDate.getHours();
+  const postMinute = postDate.getMinutes();
+  const postSecond = postDate.getSeconds();
+
+  if (currentYear != postYear)
+    return `${postDay} ${months[postMonth]} ${postYear}`;
+  else if (
+    postMonth == currentMonth &&
+    postDate - currentDate < 7 &&
+    postDay != currentDay
+  )
+    return `${postDay - currentDay}d ago `;  
+  else if (postHour != currentHour)
+    return `${currentHour - postHour}h ago`;
+  else if (postHour == currentHour && currentMinute != postMinute)
+    return `${currentMinute - postMinute}m ago`;
+  else if (postMinute == currentMinute)
+    return `${currentSecond - postSecond}s ago`;
+  else if (currentYear == postYear) return `${postDay} ${months[postMonth]} `;
+};
 
 function Post({
   content,
@@ -19,60 +70,10 @@ function Post({
 }) {
   const { ref, inView } = useInView();
 
-  {
-    /* <div
-              key={post._id}
-              className="bg-white p-4 rounded-lg shadow border-dotted border-2 border-gray-300"
-            >
-              <div className="font-bold text-gray-500 mb-1">{post.user}</div>
-              <div className="text-gray-700">{post.content}</div>
-            </div> */
-  }
+  const [like, updateLike] = useState(likes)
 
-  const formatTime = (time) => {
-    const months = [
-      "January",
-      "February",
-      "March",
-      "April",
-      "May",
-      "June",
-      "July",
-      "August",
-      "September",
-      "October",
-      "November",
-      "December",
-    ];
-    const currentDate = new Date();
-    const currentYear = currentDate.getFullYear();
-    const currentMonth = currentDate.getMonth();
-    const currentDay = currentDate.getDate();
-    const currentHour = currentDate.getHours();
-    const currentMinute = currentDate.getMinutes();
-    const currentSecond = currentDate.getSeconds();
-    //const currentTime = currentDate.getTime()
 
-    const postDate = new Date(time);
-    const postYear = postDate.getFullYear();
-    const postMonth = postDate.getMonth();
-    const postDay = postDate.getDate();
-    const postHour = postDate.getHours();
-    const postMinute = postDate.getMinutes();
-    const postSecond = postDate.getSeconds();
-
-    if (currentYear != postYear)
-      return `${postDay} ${months[postMonth]} ${postYear}`;
-    else if (postMonth == currentMonth && postDate - currentDate < 7 &&  postDay != currentDay)
-      return `${postDay - currentDay} `;
-    else if (postHour == currentHour && currentMinute != postMinute)
-      return `${currentMinute - postMinute}m ago`;
-    else if (postMinute == currentMinute)
-      return `${currentSecond - postSecond}s ago`;
-    else if (currentYear == postYear) return `${postDay} ${months[postMonth]} `;
-  };
-
-  console.log(formatTime(time), content);
+ // console.log(formatTime(time), content);
 
   const postID = postid;
 
@@ -80,17 +81,36 @@ function Post({
     e.preventDefault();
     localStorage.setItem(
       "currentPost",
-      JSON.stringify({ content, email, time, postID })
+      JSON.stringify({
+        content,
+        keey,
+        email,
+        time,
+        postid,
+        setPost,
+        likes,
+        comments,
+        user,
+      })
     );
     setPost(true);
   }
+
+  const handleLike = async () => {
+    const { data, error } = await supabase
+    .from('posts')
+    .update({likes : likes + 1 })
+    .eq('id', postid)
+    updateLike(likes + 1)
+    //console.log(error);
+  }
+
 
   return (
     <div className="wrapper" key={keey} ref={ref}>
       {inView && (
         <div
           className="flex w-full flex-col "
-          onClick={(e) => openPostModal(e)}
         >
           <div className="flex w-full flex-col pr-2 pl-2 border-b  border-dotted border-gray-300">
             <div className="postMeta-data flex items-center justify-between ">
@@ -99,26 +119,28 @@ function Post({
                 <FontAwesomeIcon icon={faEllipsisVertical} />
               </span>
             </div>
-            <div className="content flex pt-[0.5rem] pb-2  ">
+            <div className="content flex pt-[0.5rem] pb-2  " onClick={(e) => openPostModal(e)} >
               <p className="text-gray-400 leading-7 cursor-pointer w-full ">
                 {content}
               </p>
             </div>
             <div className="buttons flex mt-2  justify-around ">
-              <div>
-                <button className="flex justify-center rounded items-center font-bold ease-in-out duration-150 cursor-pointer text-pink-300 hover:text-gray-950 hover:bg-pink-300 pt-2 pb-2 pr-2 pl-2">
+              <div className="flex  text-pink-300 rounded  p-2 " >
+                <button className="flex justify-center rounded items-center font-bold ease-in-out duration-150 cursor-pointer text-pink-300 hover:text-gray-950 hover:bg-pink-300 p-2" onClick={handleLike} >
                   <FontAwesomeIcon icon={faHeart} />
-                  <span className="flex p-2">{likes}</span>
                 </button>
+                  <span className="flex p-2 font-bold ">{like}</span>
               </div>
-              <div>
-                <button className="flex text-amber-300 hover:text-amber-800 ease-in-out duration-150 rounded hover:bg-amber-200 cursor-pointer justify-center items-center font-bold pt-2 pb-2 pr-2 pl-2">
+              <div className="flex  text-amber-300 rounded  p-2" >
+                <button className="flex text-amber-300 hover:text-amber-800 ease-in-out duration-150 rounded hover:bg-amber-200 cursor-pointer justify-center items-center font-bold p-2" onClick={(e) => openPostModal(e)} >
                   <FontAwesomeIcon icon={faComment} />
-                  <span className="flex p-2">{comments}</span>
                 </button>
+                  <span className="flex p-2 font-bold">{comments}</span>
               </div>
-              <div className="flex justify-end items-end">
-                <p className="text-end text-purple-400 text-sm">{formatTime(time)}</p>
+              <div className="flex justify-end items-end p-2">
+                <p className="text-end text-purple-400 font-semibold p-2 text-sm">
+                  {formatTime(time)}
+                </p>
               </div>
             </div>
           </div>

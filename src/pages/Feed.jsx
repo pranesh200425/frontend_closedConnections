@@ -46,7 +46,7 @@ export default function Feed() {
       .from('posts')
       .select('*')
       .eq('group', 0)
-      console.log(data, error);
+      //console.log(data, error);
       setPosts(data)
     } catch (error) {
       console.log("error fetching posts");

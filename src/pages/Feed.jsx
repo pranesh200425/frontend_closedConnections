@@ -69,9 +69,10 @@ export default function Feed() {
       comments: [],
       group : userdata.group
     });
-    console.log(data, error);
+    //console.log(data, error);
 
     setInput("");
+    getPosts()
   };
 
   useEffect(() => {

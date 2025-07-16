@@ -47,7 +47,7 @@ export const formatTime = (time) => {
     postDate - currentDate < 7 &&
     postDay != currentDay
   )
-    return `${postDay - currentDay}d ago `;  
+    return `${currentDay - postDay}d ago `;  
   else if (postHour != currentHour)
     return `${currentHour - postHour}h ago`;
   else if (postHour == currentHour && currentMinute != postMinute)
@@ -71,6 +71,8 @@ function Post({
   const { ref, inView } = useInView();
 
   const [like, updateLike] = useState(likes)
+  
+ 
 
 
  // console.log(formatTime(time), content);
@@ -103,6 +105,15 @@ function Post({
     .eq('id', postid)
     updateLike(likes + 1)
     //console.log(error);
+  }
+
+  const getComments = async () => {
+      const {data, error} = await supabase
+      .from('comments')
+      .select('*')
+      .eq('post_id', postData.postid)
+      setComments(data)
+      console.log(data);
   }
 
 

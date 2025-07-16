@@ -7,13 +7,15 @@ import { useEffect } from 'react'
 import { formatTime } from './Post'
 import { supabase } from '../../../supa_auth'
 
-function PostModal({ setPost }) {
+function PostModal({ setPost, change }) {
 
     const [input, setInput] = React.useState('')
     const [comments, setComments] = React.useState([])
+    const [userdata, setuserdata] = React.useState({});
+    
 
 const postData = JSON.parse(localStorage.getItem('currentPost'))
-function handleEnter(e) {
+/* function handleEnter(e) {
     e.preventDefault()
     
     if (e.key === 'Enter') {
@@ -21,46 +23,66 @@ function handleEnter(e) {
         postComment()
         setInput('')
     }
-}
+} */
+
+async function getUser() {
+      const {
+        data: { user },
+      } = await supabase.auth.getUser();
+
+      setuserdata(user);
+    }
 
 const postComment = async () => {
-    const {data: commentData, error:commentError} = await supabase
-    .from('posts')
-    .select('comments')
-    .eq('id', postData.postid)
-    
-    commentData[0].comments.push('haha nothing')
-    console.log(commentData[0]);
-    
-    const comment = {
-        user : postData.user,
-        createdAt: new Date(),
-        replies : [],
+    //console.log(userdata);
+    if(input === '')
+        return null
+    const {data, error} = await supabase
+    .from('comments')
+    .insert({
+        post_id : postData.postid,
+        user_id: userdata.id,
+        content : input,
         likes : 0,
-        content : input
-    }
-    const { data, error } = await supabase
+        user : userdata.user_metadata.username
+    })
+    //console.log(data, error);
+    
+    const {data: getpostdata, error: getposterror} = await supabase
     .from('posts')
-    .update({comments : commentData[0]})
+    .select('*')
     .eq('id', postData.postid)
-    console.log('commented', error); 
+    //console.log(postData.postid);
+    
+    //console.log('postdata:', getpostdata[0].comments);
+    const postComments = getpostdata[0].comments
+    const {data: postdata, error: posterror} = await supabase
+    .from('posts')
+    .update({comments : postComments + 1})
+    .eq('id', postData.postid)
+    .select()
+
+    console.log(postData, posterror);
+    change(false)
+    setInput('')
+    getComments()
+    //console.log(data, error);
     
 }
 
 const getComments = async () => {
     const {data, error} = await supabase
-    .from('posts')
-    .select('comments')
-    .eq('id', postData.postid)
-    setComments(data[0].comments)
-    console.log(comments);
+    .from('comments')
+    .select('*')
+    .eq('post_id', postData.postid)
+    setComments(data)
+    //console.log(data);
 }
 
 useEffect(()=> {
     getComments()
+    getUser()
 }, [])
-//console.log(postData);
-//console.log(comments);
 
   return (
     <div className='flex flex-col w-full justify-start items-end h-full relative ' >
@@ -84,10 +106,10 @@ useEffect(()=> {
                 </div>
             </div>
         </div>
-        <div className="comments flex flex-col flex-11/12  w-[92%] pr-4  overflow-y-scroll " id="comments">
+        <div className="comments flex flex-col flex-11/12  w-full pr-4  overflow-y-scroll " id="comments">
             {
             comments.length > 0 ? comments.map(comment => (
-                <CommentModal content={comment} key={comment.createdAt} time={comment.createdAt} email={comment.email} />
+                <CommentModal content={comment.content} key={comment.create_at} time={formatTime(comment.created_at)} likes={comment.likes} post_id={comment.post_id} user_id={comment.user_id} user={comment.user} />
                 //console.log(comment)
             )) 
              : <div className='flex flex-col items-center justify-center h-full w-full' >
@@ -97,8 +119,8 @@ useEffect(()=> {
         
         </div>
         <div className="comment-box flex items-center justify-center shadow-2xl shadow-black border-t-gray-300 w-full ">
-            <input type="text" className='flex w-[75%] p-3  outline-none ' placeholder="Write a comment..." value={input}  onChange={(e) => {setInput(e.target.value)}}  /* onKeyDown={(e) => handleEnter(e)} */ />
-            <button className='flex w-[25%] justify-center h-full items-center hover:cursor-pointer tex-xl font-bold  bg-amber-100 hover:bg-amber-200 ease-in-out duration-300 transition-all border-2 '  onClick={postComment}  >Post</button>
+            <input type="text" className='flex w-[75%] p-3  outline-none ' placeholder="Write a comment..." value={input}  onChange={(e) => {setInput(e.target.value)}} required  onKeyDown={(e) => { if(e.key === 'Enter') postComment()}}/>
+            <button className='flex w-[25%] justify-center h-full items-center hover:cursor-pointer tex-xl font-bold  bg-amber-100 hover:bg-amber-200 ease-in-out duration-300 transition-all border-2 'onClick={(e) => postComment(e)}  >Post</button>
         </div>
     </div>
   )

@@ -14,7 +14,7 @@ export default function Feed() {
   const [input, setInput] = useState("");
   const [isPost, setPost] = useState(false);
   const [userdata, setuserdata] = useState({});
-
+  const [render, change] = useState(true)
   const navigate = useNavigate();
 
   /* useEffect(() => {
@@ -28,7 +28,6 @@ export default function Feed() {
     }
 }, [navigate]) */
 
-  let render = 0;
   const user = {
     username: "userInfo.email",
     profilePic: "https://ui-avatars.com/api/?name=You&background=random",
@@ -48,10 +47,14 @@ export default function Feed() {
       .eq('group', 0)
       //console.log(data, error);
       setPosts(data)
+      change(true)
+      
     } catch (error) {
       console.log("error fetching posts");
     }
   };
+
+  
 
   /*  useEffect(()=>{
     getPosts()
@@ -66,10 +69,10 @@ export default function Feed() {
       username: userdata.username,
       content: input,
       likes: 0,
-      comments: [],
+      comments: 0,
       group : userdata.group
     });
-    //console.log(data, error);
+    console.log(data, error);
 
     setInput("");
     getPosts()
@@ -219,7 +222,8 @@ export default function Feed() {
                     postid={post.id}
                     setPost={setPost}
                     likes={post.likes}
-                    comments={post.comments.length}
+                    comments={post.comments}
+                    
                   />
                 ))
               ) : (
@@ -232,7 +236,7 @@ export default function Feed() {
         )}
         {isPost && (
           <div className="flex flex-col w-full h-full">
-            <PostModal setPost={setPost} />
+            <PostModal setPost={setPost} change = {change} />
           </div>
         )}
       </div>

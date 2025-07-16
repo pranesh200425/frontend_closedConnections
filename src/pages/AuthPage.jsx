@@ -44,7 +44,7 @@ function Login({ onSwitch }) {
   return (
     <form
       onSubmit={handleSubmit}
-      className="bg-white p-6 rounded-lg shadow w-full max-w-sm border-dotted border-2 border-gray-300"
+      className="bg-white p-6 rounded-lg shadow-xl  w-full max-w-sm border-dotted border-2 border-gray-300"
     >
       <Analytics />
       <h2 className="text-4xl font-extrabold mb-5 text-gray-500 text-center">
@@ -185,7 +185,7 @@ function Signup({ onSwitch }) {
   return (
     <form
       onSubmit={handleSubmit}
-      className="bg-white p-6 rounded-lg shadow w-full max-w-sm border-dotted border-2 border-gray-300"
+      className="bg-white p-6 rounded-lg shadow-xl w-full max-w-sm border-dotted border-2 border-gray-300"
     >
       <h2 className="text-4xl font-extrabold mb-5 text-gray-500 text-center">
         Sign Up

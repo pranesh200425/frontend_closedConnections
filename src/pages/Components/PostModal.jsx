@@ -100,6 +100,7 @@ function PostModal({ setPost, change }) {
 
   return (
     <div className="flex flex-col w-full justify-start items-end h-full relative ">
+
       <div
         className="flex w-full justify-start "
         onClick={() => {

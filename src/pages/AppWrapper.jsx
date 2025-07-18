@@ -1,19 +1,21 @@
-import React from 'react'
-import Feed from './Feed'
-import AuthPage from './AuthPage'
+import React, { useContext } from 'react'
+import { useNavigate } from "react-router-dom";
+import { Context } from '../Context'
 
 function AppWrapper() {
 
-    const isLoggedIn = localStorage.getItem('token') !== null
-    console.log('isLoggedIn:', isLoggedIn)
+    const navigate = useNavigate()
 
-    if(isLoggedIn){
+    const session = useContext(Context)
+    console.log('session at wrapper:', session);
+    
+    if(session != null){
         return (
-            <Feed />
+            navigate('/Home')
         )
     } else {
         return (
-            <AuthPage />
+            navigate('/Login')
         )
     }
   

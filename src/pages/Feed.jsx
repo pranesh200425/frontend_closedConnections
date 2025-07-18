@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useContext } from "react";
 import "../App.css";
 import Post from "./Components/Post";
 import { useNavigate } from "react-router-dom";
@@ -8,14 +8,18 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faBars, faBackward } from "@fortawesome/free-solid-svg-icons";
 import Nav from "./Components/Nav";
 import { supabase } from "../../supa_auth.js";
+import { Context } from "../Context.jsx";
 
 export default function Feed() {
   const [posts, setPosts] = useState([]);
   const [input, setInput] = useState("");
+  const [userSession, setUserSession] = useState({})
   const [isPost, setPost] = useState(false);
   const [userdata, setuserdata] = useState({});
   const [render, change] = useState(true)
   const navigate = useNavigate();
+
+  
 
   /* useEffect(() => {
   
@@ -60,11 +64,11 @@ export default function Feed() {
     
     if (input.trim() === "") return;
     const { data, error } = await supabase.from("posts").insert({
-      username: userdata.user_metadata.username,
+      username: userdata.username,
       content: input,
       likes: 0,
       comments: 0,
-      group : userdata.user_metadata.group,
+      group : userdata.group,
       user_id : userdata.id
     });
     console.log(data, error);
@@ -73,22 +77,25 @@ export default function Feed() {
     getPosts()
   };
 
+  const session = useContext(Context)
+
   useEffect(() => {
     async function getUser() {
       const {
         data: { user },
       } = await supabase.auth.getUser();
-
       setuserdata(user.user_metadata);
     }
     getUser();
     getPosts();
   }, [render]);
+  
+  console.log('session here:',session)
 
-   /* useEffect(() => {
-    console.log("Updated userdata:", userdata);
-    getPosts();
-  }, [userdata]);  */
+useEffect(()=>{
+  setUserSession(session)
+  console.log(userSession)
+},[])
 
   const singout = async (e) => {
     e.preventDefault();

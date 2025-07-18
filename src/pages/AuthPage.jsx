@@ -1,36 +1,18 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useContext } from "react";
 import { useNavigate } from "react-router-dom";
 import "../index.css";
 import Feed from "./Feed";
 import { Analytics } from "@vercel/analytics/react";
 import { supabase } from "../../supa_auth.js";
+import { Context } from "../Context.jsx";
 
-function setLoginStat() {
-  localStorage.setItem("token", "true");
-}
-
-function authState() {
-
-supabase.auth.onAuthStateChange((event, session) => {
-  if (session && session.provider_token) {
-    window.localStorage.setItem('oauth_provider_token', session.provider_token)
-  }
-
-  if (session && session.provider_refresh_token) {
-    window.localStorage.setItem('oauth_provider_refresh_token', session.provider_refresh_token)
-  }
-
-  if (event === 'SIGNED_OUT') {
-    window.localStorage.removeItem('oauth_provider_token')
-    window.localStorage.removeItem('oauth_provider_refresh_token')
-  }
-})
-}
 function Login({ onSwitch }) {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [message, setMessage] = useState("");
-  
+
+  const session = useContext(Context);
+
   const isLoggedIn = localStorage.getItem("token") !== null;
 
   let userInfo;
@@ -49,15 +31,24 @@ function Login({ onSwitch }) {
     // console.log(data)
     if (data && !error) {
       //console.log(data);
-      authState()
+      authState();
       return navigate("/Home");
     }
     if (error) {
       setMessage("");
-     // console.log(error.message);
+      // console.log(error.message);
       setMessage(error.message);
     }
   };
+
+  function redirect(){
+    if(session != null)
+      navigate('/Home')
+  }
+
+  useEffect(()=>{
+    redirect()
+  }, [])
 
   return (
     <form
@@ -126,7 +117,6 @@ function Signup({ onSwitch }) {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    
 
     const { data, error } = await supabase.auth.signUp({
       email: email,
@@ -173,7 +163,7 @@ function Signup({ onSwitch }) {
         .from("groups")
         .insert({ group_ID: current_group + 1, members: 0 })
         .select();
-     // console.log(error);
+      // console.log(error);
       // console.log("new group created");
 
       const { data, error: creategrouperror } = await supabase
@@ -197,7 +187,6 @@ function Signup({ onSwitch }) {
         password,
       });
     navigate("/Home");
-    
   };
 
   return (

@@ -67,10 +67,12 @@ function Post({
   likes,
   comments,
   user,
+  change,
+  render
 }) {
   const { ref, inView } = useInView();
 
-  const [like, updateLike] = useState(likes)
+ // const [like, updateLike] = useState(likes)
   
  
 
@@ -98,23 +100,20 @@ function Post({
     setPost(true);
   }
 
-  const handleLike = async () => {
-    const { data, error } = await supabase
-    .from('posts')
-    .update({likes : likes + 1 })
-    .eq('id', postid)
-    updateLike(likes + 1)
-    //console.log(error);
-  }
-
-  const getComments = async () => {
-      const {data, error} = await supabase
-      .from('comments')
-      .select('*')
-      .eq('post_id', postData.postid)
-      setComments(data)
-      console.log(data);
-  }
+ const [like, updateLike] = useState(likes)
+ const handleLike = async () => {
+  console.log('works');
+  
+     const { data, error } = await supabase
+     .from('posts')
+     .update({likes : like + 1 })
+     .eq('id', postid)
+     //console.log(data, error);
+     
+     updateLike(like + 1)
+     //console.log(error);
+     change(!render)
+   }
 
 
   return (

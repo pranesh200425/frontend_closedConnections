@@ -45,6 +45,7 @@ export default function Feed() {
       .from('posts')
       .select('*')
       .eq('group', 0)
+      .order('id', { ascending: false })
       //console.log(data, error);
       setPosts(data)
       change(true)
@@ -54,26 +55,20 @@ export default function Feed() {
     }
   };
 
-  
-
-  /*  useEffect(()=>{
-    getPosts()
-    console.log("post fetched here")
-  }, [])  */
-
   const handlePost = async (e) => {
     e.preventDefault();
-
+    
     if (input.trim() === "") return;
     const { data, error } = await supabase.from("posts").insert({
-      username: userdata.username,
+      username: userdata.user_metadata.username,
       content: input,
       likes: 0,
       comments: 0,
-      group : userdata.group
+      group : userdata.user_metadata.group,
+      user_id : userdata.id
     });
     console.log(data, error);
-
+    console.log(userdata.id)
     setInput("");
     getPosts()
   };
@@ -88,12 +83,12 @@ export default function Feed() {
     }
     getUser();
     getPosts();
-  }, []);
+  }, [render]);
 
-  /* useEffect(() => {
-    //console.log("Updated userdata:", userdata);
+   /* useEffect(() => {
+    console.log("Updated userdata:", userdata);
     getPosts();
-  }, [userdata]); */
+  }, [userdata]);  */
 
   const singout = async (e) => {
     e.preventDefault();
@@ -102,11 +97,11 @@ export default function Feed() {
   };
 
   const style_sm =
-    "flex p-2 w-[90%] absolute top-2 bg-white font-semibold rounded-xl z-50 justify-center items-center p-3 border border-dotted";
+    "flex p-2 w-[90%] absolute top-2 bg-white font-semibold rounded-xl z-50 justify-center items-center shadow-sm p-3 border border-dotted";
   const [isside, setSide] = useState(false);
 
   const style_md =
-    "flex w-[95%] text-xl pt-4 pb-4 pr-4 pl-2 font-semibold border-2 border-dotted border-black rounded-3xl mt-2 justify-end";
+    "flex w-[95%] text-xl pt-4 pb-4 pr-4 pl-2 font-semibold border-2 border-dotted border-black rounded-3xl  mt-2 justify-end";
   return (
     <div
       className="flex  items-center h-screen overflow-none bg-white w-[100%] pt-14 relative"
@@ -223,7 +218,8 @@ export default function Feed() {
                     setPost={setPost}
                     likes={post.likes}
                     comments={post.comments}
-                    
+                    change = {change}
+                    render = {render}
                   />
                 ))
               ) : (

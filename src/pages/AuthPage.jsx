@@ -9,11 +9,28 @@ function setLoginStat() {
   localStorage.setItem("token", "true");
 }
 
+function authState() {
+
+supabase.auth.onAuthStateChange((event, session) => {
+  if (session && session.provider_token) {
+    window.localStorage.setItem('oauth_provider_token', session.provider_token)
+  }
+
+  if (session && session.provider_refresh_token) {
+    window.localStorage.setItem('oauth_provider_refresh_token', session.provider_refresh_token)
+  }
+
+  if (event === 'SIGNED_OUT') {
+    window.localStorage.removeItem('oauth_provider_token')
+    window.localStorage.removeItem('oauth_provider_refresh_token')
+  }
+})
+}
 function Login({ onSwitch }) {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [message, setMessage] = useState("");
-
+  
   const isLoggedIn = localStorage.getItem("token") !== null;
 
   let userInfo;
@@ -32,6 +49,7 @@ function Login({ onSwitch }) {
     // console.log(data)
     if (data && !error) {
       //console.log(data);
+      authState()
       return navigate("/Home");
     }
     if (error) {

@@ -6,7 +6,8 @@ import {
   faEllipsisVertical,
 } from "@fortawesome/free-solid-svg-icons";
 import { supabase } from "../../../supa_auth";
-import { useEffect, useState } from "react";
+import { useContext, useState } from "react";
+import { Context } from "../../Context";
 
 export const formatTime = (time) => {
   const months = [
@@ -30,7 +31,6 @@ export const formatTime = (time) => {
   const currentHour = currentDate.getHours();
   const currentMinute = currentDate.getMinutes();
   const currentSecond = currentDate.getSeconds();
-  //const currentTime = currentDate.getTime()
 
   const postDate = new Date(time);
   const postYear = postDate.getFullYear();
@@ -70,45 +70,23 @@ function Post({
   render,
 }) {
   const { ref, inView } = useInView();
-
-  // const [like, updateLike] = useState(likes)
-
-  // console.log(formatTime(time), content);
+  const { post, updatePost } = useContext(Context);
 
   const postID = postid;
 
   function openPostModal(e) {
     e.preventDefault();
-    localStorage.setItem(
-      "currentPost",
-      JSON.stringify({
-        content,
-        keey,
-        email,
-        time,
-        postid,
-        setPost,
-        likes,
-        comments,
-        user,
-      })
-    );
+    updatePost(postid)
     setPost(true);
   }
 
   const [like, updateLike] = useState(likes);
   const handleLike = async () => {
-    //console.log(like);
-    
     const { data, error } = await supabase
       .from("posts")
       .update({ likes: like + 1 })
       .eq("id", postid);
-    //console.log(data, error);
-    //console.log(like);
     updateLike(like + 1);
-    //console.log(error);
-    //console.log("works");
     change(!render);
   };
 

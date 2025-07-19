@@ -3,15 +3,18 @@ import "../../App.css";
 import CommentModal from "./CommentModal";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faBackward, faHeart } from "@fortawesome/free-solid-svg-icons";
-import { useEffect } from "react";
+import { useEffect, useContext } from "react";
 import { formatTime } from "./Post";
 import { supabase } from "../../../supa_auth";
+import { Context } from "../../Context";
 
 function PostModal({ setPost, change }) {
   const [input, setInput] = React.useState("");
   const [comments, setComments] = React.useState([]);
   const [userdata, setuserdata] = React.useState({});
-  const [post, setCurrentPost] = React.useState({});
+  const [displayPost, setCurrentPost] = React.useState({});
+    const { post, updatePost } = useContext(Context);
+  
 
   const postData = JSON.parse(localStorage.getItem("currentPost"));
 
@@ -20,31 +23,26 @@ function PostModal({ setPost, change }) {
       const { data, error } = await supabase
         .from("posts")
         .select("*")
-        .eq("id", postData.postid);
-
+        .eq("id", post);
+      
       const thisPost = data[0];
       setCurrentPost(thisPost);
     };
-    if(postData?.postid)
         getPost();
-  }, [postData?.postid]);
+  }, [post]);
 
-  useEffect(() => {}, [post]);
 
-  const [like, updateLike] = React.useState(post.likes);
+  const [like, updateLike] = React.useState(displayPost.likes);
+  console.log("displayPost:", displayPost)
   const handleLike = async () => {
-   // console.log(like, postData.postid);
 
     const { data, error } = await supabase
       .from("posts")
       .update({ likes: like + 1 })
-      .eq("id", postData.postid)
+      .eq("id", post)
       .select()
 
     updateLike(like + 1);
-    //console.log(data, error);
-    //console.log(like);
-    
   };
 
   async function getUser() {
@@ -54,49 +52,43 @@ function PostModal({ setPost, change }) {
 
     setuserdata(user);
   }
-
+  //console.log('post',displayPost);
+  
   const postComment = async () => {
-    //console.log(userdata);
     if (input === "") return null;
     const { data, error } = await supabase.from("comments").insert({
-      post_id: postData.postid,
+      post_id: post,
       user_id: userdata.id,
       content: input,
       likes: 0,
       user: userdata.user_metadata.username,
     });
-    //console.log(data, error);
 
     const { data: getpostdata, error: getposterror } = await supabase
       .from("posts")
       .select("*")
-      .eq("id", postData.postid);
-    //console.log(postData.postid);
-
-    //console.log('postdata:', getpostdata[0].comments);
+      .eq("id", post);
     const postComments = getpostdata[0].comments;
     const { data: postdata, error: posterror } = await supabase
       .from("posts")
       .update({ comments: postComments + 1 })
-      .eq("id", postData.postid)
+      .eq("id", post)
       .select();
 
     console.log(postData, posterror);
     change(false);
     setInput("");
     getComments();
-    //console.log(data, error);
   };
 
   const getComments = async () => {
     const { data, error } = await supabase
       .from("comments")
       .select("*")
-      .eq("post_id", postData.postid)
+      .eq("post_id", post)
       .order('id', { ascending: false })
     setComments(data);
-    updateLike(postData.likes);
-    //console.log(data);
+    updateLike(displayPost.likes);
   };
 
   useEffect(() => {
@@ -119,13 +111,13 @@ function PostModal({ setPost, change }) {
       </div>
       <div className="post flex flex-col w-full sticky shadow-[0_2px_2px_rgba(0,0,0,0.15)] pr-2 pl-2 pb-2">
         <div className="post-data flex justify-between items-center  ">
-          <div className="username flex text-xl"> {post.username}</div>
+          <div className="username flex text-xl"> {displayPost.username}</div>
           <div className="time flex p-2 text-purple-400 font-semibold text-sm">
-            {post.created_at && formatTime(post.created_at)}
+            {post.created_at && formatTime(displayPost.created_at)}
           </div>
         </div>
         <div className="content flex mt-2 mb-2">
-          <p className="text-gray-400 leading-7 ">{post.content ? post.content : 'Loading...'}</p>
+          <p className="text-gray-400 leading-7 ">{displayPost.content ? displayPost.content : 'Loading...'}</p>
         </div>
         <div className="other flex justify-between items-center ">
           <div

@@ -12,7 +12,7 @@ function Login({ onSwitch }) {
   const [message, setMessage] = useState("");
 
   const session = useContext(Context);
-
+    const [userSession, setUserSession] = useState(null);
   const isLoggedIn = localStorage.getItem("token") !== null;
 
   let userInfo;
@@ -20,7 +20,8 @@ function Login({ onSwitch }) {
 
   const localURL = "http://localhost:5000";
   const backendURL = "https://backend-closedconnections-tq1k.onrender.com";
-
+      //const session = useContext(Context)
+  
   const handleSubmit = async (e) => {
     //console.log("before preventDefault");
     e.preventDefault();
@@ -40,13 +41,12 @@ function Login({ onSwitch }) {
     }
   };
 
-  function redirect(){
-    if(session != null)
-      navigate('/Home')
-  }
+  
 
   useEffect(()=>{
-    redirect()
+    /* redirect() */
+    setUserSession(session.session);
+    console.log("userSession:", userSession);
   }, [])
 
   return (
@@ -142,7 +142,6 @@ function Signup({ onSwitch }) {
       .select("")
       .eq("group_ID", current_group);
     let group_members = groupdata[0].members;
-    console.log(group_members);
     let usergroup;
     if (group_members < 100) {
       const { data, error } = await supabase

@@ -10,17 +10,14 @@ function AppWrapper() {
     console.log('session at wrapper:', session);
     
     useEffect(()=>{
-      if(session != null){
-          return (
-              navigate('/Home')
-          )
+      if(session){
+        navigate('/Home')
       } else {
-          return (
-              navigate('/Login')
-          )
+        navigate('/Login')
       }
+    },[session, navigate])
 
- },[])
+    return <div>Loading...</div>
 }
 
 export default AppWrapper

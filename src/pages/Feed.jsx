@@ -13,13 +13,11 @@ import { Context } from "../Context.jsx";
 export default function Feed() {
   const [posts, setPosts] = useState([]);
   const [input, setInput] = useState("");
-  const [userSession, setUserSession] = useState({})
+  const [userSession, setUserSession] = useState({});
   const [isPost, setPost] = useState(false);
   const [userdata, setuserdata] = useState({});
-  const [render, change] = useState(true)
+  const [render, change] = useState(true);
   const navigate = useNavigate();
-
-  
 
   /* useEffect(() => {
   
@@ -45,15 +43,14 @@ export default function Feed() {
 
   const getPosts = async () => {
     try {
-      const { data , error } = await supabase
-      .from('posts')
-      .select('*')
-      .eq('group', 0)
-      .order('id', { ascending: false })
+      const { data, error } = await supabase
+        .from("posts")
+        .select("*")
+        .eq("group", 0)
+        .order("id", { ascending: false });
       //console.log(data, error);
-      setPosts(data)
-      change(true)
-      
+      setPosts(data);
+      change(true);
     } catch (error) {
       console.log("error fetching posts");
     }
@@ -61,42 +58,37 @@ export default function Feed() {
 
   const handlePost = async (e) => {
     e.preventDefault();
-    
+
     if (input.trim() === "") return;
-   const { data, error } = await supabase.from("posts").insert({
+    const { data, error } = await supabase.from("posts").insert({
       username: userdata.user_metadata.username,
       content: input,
       likes: 0,
       comments: 0,
-      group : userdata.user_metadata.group,
-      user_id : userdata.id
+      group: userdata.user_metadata.group,
+      user_id: userdata.id,
     });
-    console.log(data, error); 
-    console.log(userdata.id)
+    //console.log(data, error);
+    //console.log(userdata.id);
     setInput("");
-    getPosts()
+    getPosts();
   };
 
-  const session = useContext(Context)
+  const session = useContext(Context);
 
-  useEffect(() => {
-    async function getUser() {
-      const {
-        data: { user },
-      } = await supabase.auth.getUser();
-      setuserdata(user);
+  function redirect(){
+      if(userSession === null)
+        navigate('/Login')
     }
-    getUser();
-    getPosts();
-  }, [render]);
-
-  
-  //console.log('session here:',session)
-
-useEffect(()=>{
-  setUserSession(session)
-  //console.log(userSession)
-},[])
+    
+    useEffect(() => {
+      setUserSession(session);
+      setuserdata(session.user);
+      //console.log(userdata);
+      
+      getPosts()
+      
+  }, [session]);
 
   const singout = async (e) => {
     e.preventDefault();
@@ -162,7 +154,7 @@ useEffect(()=>{
       >
         <Nav style={style_md} />
         <div className="text-2xl font-bold w-full mt-4 mb-4 text-gray-700  ">
-          {userdata.username}
+          {/* userdata.username ||  */ "nothing"}
         </div>
         <div className="text-gray-500 mb-2 text-center">{user.bio}</div>
         <div className="flex flex-col gap-1 text-sm text-gray-600 w-full">
@@ -226,8 +218,8 @@ useEffect(()=>{
                     setPost={setPost}
                     likes={post.likes}
                     comments={post.comments}
-                    change = {change}
-                    render = {render}
+                    change={change}
+                    render={render}
                   />
                 ))
               ) : (
@@ -240,7 +232,7 @@ useEffect(()=>{
         )}
         {isPost && (
           <div className="flex flex-col w-full h-full">
-            <PostModal setPost={setPost} change = {change} />
+            <PostModal setPost={setPost} change={change} />
           </div>
         )}
       </div>

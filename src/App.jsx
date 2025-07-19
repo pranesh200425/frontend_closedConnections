@@ -9,6 +9,8 @@ import { supabase } from "../supa_auth";
 
 function App() {
   const [session, setSession] = React.useState(null);
+  const [user, setUser] = React.useState(null);
+  const [post, updatePost] = React.useState(null);
   useEffect(() => {
     function getSession() {
       const {
@@ -25,12 +27,20 @@ function App() {
         subscription.unsubscribe();
       };
     }
+    async function getUser() {
+      const {
+        data: { user },
+      } = await supabase.auth.getUser();
+      setUser(user)
+      //console.log(userdata)
+    }
+    getUser()
     getSession()
   }, []);
 
 
   return (
-    <Context.Provider value={ session }>
+    <Context.Provider value={ {session, user, post, updatePost }}>
       <BrowserRouter>
         <Routes>
           <Route path="/" element={<AppWrapper />} />

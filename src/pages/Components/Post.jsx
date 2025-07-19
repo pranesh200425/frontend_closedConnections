@@ -72,8 +72,6 @@ function Post({
   const { ref, inView } = useInView();
   const { post, updatePost } = useContext(Context);
 
-  const postID = postid;
-
   function openPostModal(e) {
     e.preventDefault();
     updatePost(postid)

@@ -12,42 +12,29 @@ function Login({ onSwitch }) {
   const [message, setMessage] = useState("");
 
   const session = useContext(Context);
-    const [userSession, setUserSession] = useState(null);
-  const isLoggedIn = localStorage.getItem("token") !== null;
+  const [userSession, setUserSession] = useState(null);
 
-  let userInfo;
   const navigate = useNavigate();
 
-  const localURL = "http://localhost:5000";
-  const backendURL = "https://backend-closedconnections-tq1k.onrender.com";
-      //const session = useContext(Context)
-  
   const handleSubmit = async (e) => {
-    //console.log("before preventDefault");
     e.preventDefault();
     const { data, error } = await supabase.auth.signInWithPassword({
       email: email,
       password: password,
     });
-    // console.log(data)
     if (data && !error) {
-      //console.log(data);
       return navigate("/Home");
     }
     if (error) {
       setMessage("");
-      // console.log(error.message);
       setMessage(error.message);
     }
   };
 
-  
-
-  useEffect(()=>{
-    /* redirect() */
+  useEffect(() => {
     setUserSession(session.session);
     console.log("userSession:", userSession);
-  }, [])
+  }, []);
 
   return (
     <form
@@ -111,8 +98,6 @@ function Signup({ onSwitch }) {
   const [message, setMessage] = useState("");
 
   const navigate = useNavigate();
-  const localURL = "http://localhost:5000";
-  const backendURL = "https://backend-closedconnections-tq1k.onrender.com";
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -135,7 +120,6 @@ function Signup({ onSwitch }) {
       .select("")
       .eq("id", 1);
     const current_group = currentGroupData[0].current_group;
-    //console.log(currentGroupData[0].current_group, currentGroupError);
 
     const { data: groupdata, error: grouperror } = await supabase
       .from("groups")
@@ -155,15 +139,11 @@ function Signup({ onSwitch }) {
             group: usergroup,
           },
         });
-      //console.log(userData, userError);
     } else {
       const { error } = await supabase
         .from("groups")
         .insert({ group_ID: current_group + 1, members: 0 })
         .select();
-      // console.log(error);
-      // console.log("new group created");
-
       const { data, error: creategrouperror } = await supabase
         .from("group_pointer")
         .update({ current_group: current_group + 1 })
@@ -176,7 +156,6 @@ function Signup({ onSwitch }) {
             group: usergroup,
           },
         });
-      //console.log(userData, userError);
     }
 
     const { data: loginData, error: loginError } =

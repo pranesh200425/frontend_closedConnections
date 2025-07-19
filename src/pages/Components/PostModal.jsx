@@ -33,7 +33,6 @@ function PostModal({ setPost, change }) {
 
 
   const [like, updateLike] = React.useState(displayPost.likes);
-  console.log("displayPost:", displayPost)
   const handleLike = async () => {
 
     const { data, error } = await supabase
@@ -52,7 +51,6 @@ function PostModal({ setPost, change }) {
 
     setuserdata(user);
   }
-  //console.log('post',displayPost);
   
   const postComment = async () => {
     if (input === "") return null;

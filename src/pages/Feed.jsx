@@ -19,17 +19,6 @@ export default function Feed() {
   const [render, change] = useState(true);
   const navigate = useNavigate();
 
-  /* useEffect(() => {
-  
-  const isLoggedIn = localStorage.getItem('token') !== null
-    
-    if(!isLoggedIn){
-    console.log('Redirecting to login page...'); 
-    console.log(isLoggedIn);
-    navigate('/Login')
-    }
-}, [navigate]) */
-
   const user = {
     username: "userInfo.email",
     profilePic: "https://ui-avatars.com/api/?name=You&background=random",
@@ -38,9 +27,6 @@ export default function Feed() {
     joined: "June 2025",
   };
 
-  const localURL = "http://localhost:5000";
-  const backendURL = "https://backend-closedconnections-tq1k.onrender.com";
-
   const getPosts = async () => {
     try {
       const { data, error } = await supabase
@@ -48,7 +34,6 @@ export default function Feed() {
         .select("*")
         .eq("group", 0)
         .order("id", { ascending: false });
-      //console.log(data, error);
       setPosts(data);
       change(true);
     } catch (error) {
@@ -58,7 +43,6 @@ export default function Feed() {
 
   const handlePost = async (e) => {
     e.preventDefault();
-
     if (input.trim() === "") return;
     const { data, error } = await supabase.from("posts").insert({
       username: userdata.user_metadata.username,
@@ -68,26 +52,20 @@ export default function Feed() {
       group: userdata.user_metadata.group,
       user_id: userdata.id,
     });
-    //console.log(data, error);
-    //console.log(userdata.id);
     setInput("");
     getPosts();
   };
 
   const session = useContext(Context);
 
-  function redirect(){
-      if(userSession === null)
-        navigate('/Login')
-    }
-    
-    useEffect(() => {
-      setUserSession(session);
-      setuserdata(session.user);
-      //console.log(userdata);
-      
-      getPosts()
-      
+  function redirect() {
+    if (userSession === null) navigate("/Login");
+  }
+
+  useEffect(() => {
+    setUserSession(session);
+    setuserdata(session.user);
+    getPosts();
   }, [session]);
 
   const singout = async (e) => {
@@ -98,10 +76,12 @@ export default function Feed() {
 
   const style_sm =
     "flex p-2 w-[90%] absolute top-2 bg-white font-semibold rounded-xl z-50 justify-center items-center shadow-sm p-3 border border-dotted";
+
   const [isside, setSide] = useState(false);
 
   const style_md =
     "flex w-[95%] text-xl pt-4 pb-4 pr-4 pl-2 font-semibold border-2 border-dotted border-black rounded-3xl  mt-2 justify-end";
+    
   return (
     <div
       className="flex  items-center h-screen overflow-none bg-white w-[100%] pt-14 relative"

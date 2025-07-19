@@ -21,7 +21,6 @@ function App() {
         } else if (session) {
           setSession(session);
         }
-        //console.log('isSession',session);
       });
       return () => {
         subscription.unsubscribe();
@@ -32,7 +31,6 @@ function App() {
         data: { user },
       } = await supabase.auth.getUser();
       setUser(user)
-      //console.log(userdata)
     }
     getUser()
     getSession()

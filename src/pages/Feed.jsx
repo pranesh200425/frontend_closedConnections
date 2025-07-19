@@ -63,15 +63,15 @@ export default function Feed() {
     e.preventDefault();
     
     if (input.trim() === "") return;
-    const { data, error } = await supabase.from("posts").insert({
-      username: userdata.username,
+   const { data, error } = await supabase.from("posts").insert({
+      username: userdata.user_metadata.username,
       content: input,
       likes: 0,
       comments: 0,
-      group : userdata.group,
+      group : userdata.user_metadata.group,
       user_id : userdata.id
     });
-    console.log(data, error);
+    console.log(data, error); 
     console.log(userdata.id)
     setInput("");
     getPosts()
@@ -84,17 +84,18 @@ export default function Feed() {
       const {
         data: { user },
       } = await supabase.auth.getUser();
-      setuserdata(user.user_metadata);
+      setuserdata(user);
     }
     getUser();
     getPosts();
   }, [render]);
+
   
-  console.log('session here:',session)
+  //console.log('session here:',session)
 
 useEffect(()=>{
   setUserSession(session)
-  console.log(userSession)
+  //console.log(userSession)
 },[])
 
   const singout = async (e) => {

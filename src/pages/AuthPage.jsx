@@ -31,7 +31,6 @@ function Login({ onSwitch }) {
     // console.log(data)
     if (data && !error) {
       //console.log(data);
-      authState();
       return navigate("/Home");
     }
     if (error) {

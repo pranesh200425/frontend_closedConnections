@@ -33,12 +33,18 @@ function PostModal({ setPost, change }) {
 
   const [like, updateLike] = React.useState(post.likes);
   const handleLike = async () => {
+   // console.log(like, postData.postid);
+
     const { data, error } = await supabase
       .from("posts")
       .update({ likes: like + 1 })
-      .eq("id", postData.postid);
+      .eq("id", postData.postid)
+      .select()
 
     updateLike(like + 1);
+    //console.log(data, error);
+    //console.log(like);
+    
   };
 
   async function getUser() {

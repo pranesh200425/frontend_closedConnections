@@ -18,7 +18,7 @@ function PostModal({ setPost, change }) {
 
   const postData = JSON.parse(localStorage.getItem("currentPost"));
 
-  useEffect(() => {
+ /*  useEffect(() => {
     const getPost = async () => {
       const { data, error } = await supabase
         .from("posts")
@@ -29,18 +29,12 @@ function PostModal({ setPost, change }) {
       setCurrentPost(thisPost);
     };
         getPost();
-  }, [post]);
+  }, [post]); */
 
 
-  const [like, updateLike] = React.useState(displayPost.likes);
-  const handleLike = async () => {
-
-    const { data, error } = await supabase
-      .from("posts")
-      .update({ likes: like + 1 })
-      .eq("id", post)
-      .select()
-
+  const [like, updateLike] = React.useState(post.likes);
+  //console.log(post)
+  const handleLike = () => {
     updateLike(like + 1);
   };
 
@@ -55,7 +49,7 @@ function PostModal({ setPost, change }) {
   const postComment = async () => {
     if (input === "") return null;
     const { data, error } = await supabase.from("comments").insert({
-      post_id: post,
+      post_id: post.postid,
       user_id: userdata.id,
       content: input,
       likes: 0,
@@ -65,12 +59,12 @@ function PostModal({ setPost, change }) {
     const { data: getpostdata, error: getposterror } = await supabase
       .from("posts")
       .select("*")
-      .eq("id", post);
+      .eq("id", post.postid);
     const postComments = getpostdata[0].comments;
     const { data: postdata, error: posterror } = await supabase
       .from("posts")
       .update({ comments: postComments + 1 })
-      .eq("id", post)
+      .eq("id", post.postid)
       .select();
 
     console.log(postData, posterror);
@@ -83,15 +77,15 @@ function PostModal({ setPost, change }) {
     const { data, error } = await supabase
       .from("comments")
       .select("*")
-      .eq("post_id", post)
+      .eq("post_id", post.postid)
       .order('id', { ascending: false })
     setComments(data);
-    updateLike(displayPost.likes);
+    updateLike(post.likes);
   };
 
   useEffect(() => {
     getComments();
-    getUser();
+    //getUser();
   }, []);
 
   return (
@@ -109,13 +103,13 @@ function PostModal({ setPost, change }) {
       </div>
       <div className="post flex flex-col w-full sticky shadow-[0_2px_2px_rgba(0,0,0,0.15)] pr-2 pl-2 pb-2">
         <div className="post-data flex justify-between items-center  ">
-          <div className="username flex text-xl"> {displayPost.username}</div>
+          <div className="username flex text-xl"> {post.user}</div>
           <div className="time flex p-2 text-purple-400 font-semibold text-sm">
-            {post.created_at && formatTime(displayPost.created_at)}
+            {post.time /* && formatTime(post.time) */}
           </div>
         </div>
         <div className="content flex mt-2 mb-2">
-          <p className="text-gray-400 leading-7 ">{displayPost.content ? displayPost.content : 'Loading...'}</p>
+          <p className="text-gray-400 leading-7 ">{post.content ? post.content : 'Loading...'}</p>
         </div>
         <div className="other flex justify-between items-center ">
           <div
@@ -125,7 +119,7 @@ function PostModal({ setPost, change }) {
             <button className="flex justify-center items-center  text-pink-300 hover:bg-pink-300 cursor-pointer hover:text-gray-950 p-2 rounded-md ">
               <FontAwesomeIcon icon={faHeart} />
             </button>
-            <span className="flex p-2">{like}</span>
+            <span className="flex p-2">{post.likes}</span>
           </div>
         </div>
       </div>

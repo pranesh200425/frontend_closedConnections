@@ -74,7 +74,18 @@ function Post({
 
   function openPostModal(e) {
     e.preventDefault();
-    updatePost(postid)
+    const post = {
+      content,
+      email,
+      time : formatTime(time),
+      postid,
+      likes,
+      comments,
+      user,
+    };
+    console.log(likes);
+    
+    updatePost(post)
     setPost(true);
   }
 

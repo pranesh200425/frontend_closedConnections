@@ -11,49 +11,22 @@ import { Context } from "../../Context";
 function PostModal({ setPost, change }) {
   const [input, setInput] = React.useState("");
   const [comments, setComments] = React.useState([]);
-  const [userdata, setuserdata] = React.useState({});
-  const [displayPost, setCurrentPost] = React.useState({});
-    const { post, updatePost } = useContext(Context);
-  
 
-  const postData = JSON.parse(localStorage.getItem("currentPost"));
-
- /*  useEffect(() => {
-    const getPost = async () => {
-      const { data, error } = await supabase
-        .from("posts")
-        .select("*")
-        .eq("id", post);
-      
-      const thisPost = data[0];
-      setCurrentPost(thisPost);
-    };
-        getPost();
-  }, [post]); */
-
-
+  const { user } = useContext(Context);
+  const { post, updatePost } = useContext(Context);
   const [like, updateLike] = React.useState(post.likes);
-  //console.log(post)
+  
   const handleLike = () => {
     updateLike(like + 1);
   };
-
-  async function getUser() {
-    const {
-      data: { user },
-    } = await supabase.auth.getUser();
-
-    setuserdata(user);
-  }
-  
   const postComment = async () => {
     if (input === "") return null;
     const { data, error } = await supabase.from("comments").insert({
       post_id: post.postid,
-      user_id: userdata.id,
+      user_id: user.id,
       content: input,
       likes: 0,
-      user: userdata.user_metadata.username,
+      user: user.user_metadata.username,
     });
 
     const { data: getpostdata, error: getposterror } = await supabase
@@ -66,8 +39,6 @@ function PostModal({ setPost, change }) {
       .update({ comments: postComments + 1 })
       .eq("id", post.postid)
       .select();
-
-    console.log(postData, posterror);
     change(false);
     setInput("");
     getComments();
@@ -78,19 +49,17 @@ function PostModal({ setPost, change }) {
       .from("comments")
       .select("*")
       .eq("post_id", post.postid)
-      .order('id', { ascending: false })
+      .order("id", { ascending: false });
     setComments(data);
     updateLike(post.likes);
   };
 
   useEffect(() => {
     getComments();
-    //getUser();
   }, []);
 
   return (
     <div className="flex flex-col w-full justify-start items-end h-full relative ">
-
       <div
         className="flex w-full justify-start "
         onClick={() => {
@@ -109,7 +78,9 @@ function PostModal({ setPost, change }) {
           </div>
         </div>
         <div className="content flex mt-2 mb-2">
-          <p className="text-gray-400 leading-7 ">{post.content ? post.content : 'Loading...'}</p>
+          <p className="text-gray-400 leading-7 ">
+            {post.content ? post.content : "Loading..."}
+          </p>
         </div>
         <div className="other flex justify-between items-center ">
           <div
@@ -119,7 +90,7 @@ function PostModal({ setPost, change }) {
             <button className="flex justify-center items-center  text-pink-300 hover:bg-pink-300 cursor-pointer hover:text-gray-950 p-2 rounded-md ">
               <FontAwesomeIcon icon={faHeart} />
             </button>
-            <span className="flex p-2">{post.likes}</span>
+            <span className="flex p-2">{like}</span>
           </div>
         </div>
       </div>

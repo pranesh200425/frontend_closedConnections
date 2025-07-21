@@ -20,6 +20,7 @@ function App() {
           setSession(null);
         } else if (session) {
           setSession(session);
+          setUser(session.user);
         }
       });
       return () => {
@@ -30,7 +31,7 @@ function App() {
       const {
         data: { user },
       } = await supabase.auth.getUser();
-      setUser(user)
+      //setUser(user)
     }
     getUser()
     getSession()

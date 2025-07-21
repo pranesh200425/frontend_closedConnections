@@ -23,7 +23,7 @@ export default function Feed() {
     username: "userInfo.email",
     profilePic: "https://ui-avatars.com/api/?name=You&background=random",
     bio: "Just another user.",
-    posts: posts.filter((p) => p.user === "You").length,
+    posts: 0,
     joined: "June 2025",
   };
 

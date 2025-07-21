@@ -83,8 +83,6 @@ function Post({
       comments,
       user,
     };
-    console.log(likes);
-    
     updatePost(post)
     setPost(true);
   }
@@ -106,8 +104,11 @@ function Post({
           <div className="flex w-full flex-col pr-2 pl-2 border-b  border-dotted border-gray-300">
             <div className="postMeta-data flex items-center justify-between ">
               <h3 className="text-lg font-semibold text-gray-600 ">{user}</h3>
-              <span className="cursor-pointer">
+              <span className="cursor-pointer relative ">
                 <FontAwesomeIcon icon={faEllipsisVertical} />
+                <div className='flex absolute right-0 top-0 bg-white p-2 font-semibold' >
+                  <p>Delete</p>
+                </div>
               </span>
             </div>
             <div

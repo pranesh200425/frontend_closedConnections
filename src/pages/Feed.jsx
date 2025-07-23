@@ -19,14 +19,6 @@ export default function Feed() {
   const [render, change] = useState(true);
   const navigate = useNavigate();
 
-  const user = {
-    username: "userInfo.email",
-    profilePic: "https://ui-avatars.com/api/?name=You&background=random",
-    bio: "Just another user.",
-    posts: 0,
-    joined: "June 2025",
-  };
-
   const getPosts = async () => {
     try {
       const { data, error } = await supabase
@@ -58,18 +50,13 @@ export default function Feed() {
 
   const { session, refresh, setRefresh } = useContext(Context);
 
-  function redirect() {
-    if (userSession === null) navigate("/Login");
-  }
-
   useEffect(() => {
     setRefresh(!refresh);
   }, []);
-
+  let user;
   useEffect(() => {
     setUserSession(session);
-    if (session != null) 
-      setuserdata(session.user || "wait");
+    if (session != null) setuserdata(session.user);
     getPosts();
   }, [session, render]);
 
@@ -139,16 +126,16 @@ export default function Feed() {
       >
         <Nav style={style_md} />
         <div className="text-2xl font-bold w-full mt-4 mb-4 text-gray-700  ">
-          {/* userdata.username ||  */ "nothing"}
+          {userdata.username}
         </div>
-        <div className="text-gray-500 mb-2 text-center">{user.bio}</div>
+        <div className="text-gray-500 mb-2 text-center">bio</div>
         <div className="flex flex-col gap-1 text-sm text-gray-600 w-full">
           <div>
             {/* <span className="font-semibold">Posts:</span> {user.posts} */}
-            <h1>{user.posts}</h1>
+            <h1>213</h1>
           </div>
           <div>
-            <span className="font-semibold">Joined:</span> {user.joined}
+            <span className="font-semibold">Joined:</span> 25th june
           </div>
         </div>
         <div>

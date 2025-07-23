@@ -26,14 +26,14 @@ function DeleteButton({ userid, postid, render, change }) {
   };
 
   return (
-    <span className="cursor-pointer relative ">
+    <span className=" relative ">
       {/* 
       <FontAwesomeIcon icon={faEllipsisVertical} /> */}
       {/* 
       {show && (
         <div className="relative " onClick> */}
       {!modal ? (
-        <div className="flex absolute right-0 top-0 bg-white p-2 font-semibold">
+        <div className="flex absolute right-0 top-0 p-2 font-semibold">
           <button onClick={() => showModal(true)}>Delete</button>
         </div>
       ) : (

@@ -104,7 +104,7 @@ function PostModal({ setPost, change, render }) {
           comments.map((comment) => (
             <CommentModal
               content={comment.content}
-              key={comment.create_at}
+              key={comment.id}
               time={formatTime(comment.created_at)}
               likes={comment.likes}
               post_id={comment.post_id}

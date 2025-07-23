@@ -214,7 +214,7 @@ export default function Feed() {
         )}
         {isPost && (
           <div className="flex flex-col w-full h-full">
-            <PostModal setPost={setPost} change={change} />
+            <PostModal setPost={setPost} change={change} render={render} />
           </div>
         )}
       </div>

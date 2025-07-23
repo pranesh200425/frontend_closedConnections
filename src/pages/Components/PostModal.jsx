@@ -8,7 +8,7 @@ import { formatTime } from "./Post";
 import { supabase } from "../../../supa_auth";
 import { Context } from "../../Context";
 
-function PostModal({ setPost, change }) {
+function PostModal({ setPost, change, render }) {
   const [input, setInput] = React.useState("");
   const [comments, setComments] = React.useState([]);
 
@@ -18,6 +18,7 @@ function PostModal({ setPost, change }) {
   
   const handleLike = () => {
     updateLike(like + 1);
+    change(!render)
   };
   const postComment = async () => {
     if (input === "") return null;
@@ -42,6 +43,7 @@ function PostModal({ setPost, change }) {
     change(false);
     setInput("");
     getComments();
+    change(!render)
   };
 
   const getComments = async () => {

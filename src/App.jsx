@@ -11,8 +11,11 @@ function App() {
   const [session, setSession] = React.useState(null);
   const [user, setUser] = React.useState(null);
   const [post, updatePost] = React.useState(null);
+  const [refresh, setRefresh] = React.useState(false);
+  let updateSession; 
   useEffect(() => {
     function getSession() {
+      
       const {
         data: { subscription },
       } = supabase.auth.onAuthStateChange((event, session) => {
@@ -33,9 +36,10 @@ function App() {
       } = await supabase.auth.getUser();
       //setUser(user)
     }
+    updateSession = getSession
     getUser()
     getSession()
-  }, []);
+  }, [refresh]);
 
 
   return (

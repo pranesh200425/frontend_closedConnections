@@ -74,7 +74,7 @@ function PostModal({ setPost, change }) {
         <div className="post-data flex justify-between items-center  ">
           <div className="username flex text-xl"> {post.user}</div>
           <div className="time flex p-2 text-purple-400 font-semibold text-sm">
-            {post.time /* && formatTime(post.time) */}
+            {post.time }
           </div>
         </div>
         <div className="content flex mt-2 mb-2">
@@ -109,7 +109,6 @@ function PostModal({ setPost, change }) {
               user_id={comment.user_id}
               user={comment.user}
             />
-            //console.log(comment)
           ))
         ) : (
           <div className="flex flex-col items-center justify-center h-full w-full">

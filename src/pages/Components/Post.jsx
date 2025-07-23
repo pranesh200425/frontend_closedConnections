@@ -6,8 +6,9 @@ import {
   faEllipsisVertical,
 } from "@fortawesome/free-solid-svg-icons";
 import { supabase } from "../../../supa_auth";
-import { useContext, useState } from "react";
+import { useContext, useState, useEffect } from "react";
 import { Context } from "../../Context";
+import DeleteButton from "./microComponents/DeleteButton";
 
 export const formatTime = (time) => {
   const months = [
@@ -68,22 +69,28 @@ function Post({
   user,
   change,
   render,
+  userid,
 }) {
   const { ref, inView } = useInView();
-  const { post, updatePost } = useContext(Context);
+  const { post, updatePost, session } = useContext(Context);
+  const [show, setShow] = useState(false);
+
+  useEffect(() => {
+    if (session.user.id === userid) setShow(true);
+  }, []);
 
   function openPostModal(e) {
     e.preventDefault();
     const post = {
       content,
       email,
-      time : formatTime(time),
+      time: formatTime(time),
       postid,
       likes,
       comments,
       user,
     };
-    updatePost(post)
+    updatePost(post);
     setPost(true);
   }
 
@@ -104,12 +111,7 @@ function Post({
           <div className="flex w-full flex-col pr-2 pl-2 border-b  border-dotted border-gray-300">
             <div className="postMeta-data flex items-center justify-between ">
               <h3 className="text-lg font-semibold text-gray-600 ">{user}</h3>
-              <span className="cursor-pointer relative ">
-                <FontAwesomeIcon icon={faEllipsisVertical} />
-                <div className='flex absolute right-0 top-0 bg-white p-2 font-semibold' >
-                  <p>Delete</p>
-                </div>
-              </span>
+              {show && <DeleteButton userid={userid} postid={postid} change={change} render={render} />}
             </div>
             <div
               className="content flex pt-[0.5rem] pb-2  "

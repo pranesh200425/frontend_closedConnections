@@ -56,7 +56,7 @@ export default function Feed() {
     getPosts();
   };
 
-  const session = useContext(Context);
+  const {session} = useContext(Context);
 
   function redirect() {
     if (userSession === null) navigate("/Login");
@@ -66,14 +66,14 @@ export default function Feed() {
     setUserSession(session);
     setuserdata(session.user);
     getPosts();
-  }, [session]);
+  }, [session, render]);
 
   const singout = async (e) => {
     e.preventDefault();
     const { error } = await supabase.auth.signOut();
     navigate("/Login");
   };
-
+  
   const style_sm =
     "flex p-2 w-[90%] absolute top-2 bg-white font-semibold rounded-xl z-50 justify-center items-center shadow-sm p-3 border border-dotted";
 
@@ -188,8 +188,10 @@ export default function Feed() {
             >
               {posts.length > 0 ? (
                 posts.map((post) => (
+                  
                   <Post
                     key={post.id}
+                    userid = {post.user_id}
                     content={post.content}
                     user={post.username}
                     email={post.email}

@@ -56,15 +56,20 @@ export default function Feed() {
     getPosts();
   };
 
-  const {session} = useContext(Context);
+  const { session, refresh, setRefresh } = useContext(Context);
 
   function redirect() {
     if (userSession === null) navigate("/Login");
   }
 
   useEffect(() => {
+    setRefresh(!refresh);
+  }, []);
+
+  useEffect(() => {
     setUserSession(session);
-    setuserdata(session.user);
+    if (session != null) 
+      setuserdata(session.user || "wait");
     getPosts();
   }, [session, render]);
 
@@ -73,7 +78,7 @@ export default function Feed() {
     const { error } = await supabase.auth.signOut();
     navigate("/Login");
   };
-  
+
   const style_sm =
     "flex p-2 w-[90%] absolute top-2 bg-white font-semibold rounded-xl z-50 justify-center items-center shadow-sm p-3 border border-dotted";
 
@@ -81,7 +86,7 @@ export default function Feed() {
 
   const style_md =
     "flex w-[95%] text-xl pt-4 pb-4 pr-4 pl-2 font-semibold border-2 border-dotted border-black rounded-3xl  mt-2 justify-end";
-    
+
   return (
     <div
       className="flex  items-center h-screen overflow-none bg-white w-[100%] pt-14 relative"
@@ -188,10 +193,9 @@ export default function Feed() {
             >
               {posts.length > 0 ? (
                 posts.map((post) => (
-                  
                   <Post
                     key={post.id}
-                    userid = {post.user_id}
+                    userid={post.user_id}
                     content={post.content}
                     user={post.username}
                     email={post.email}

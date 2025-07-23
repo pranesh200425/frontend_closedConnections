@@ -7,8 +7,6 @@ function AppWrapper() {
     const navigate = useNavigate()
 
     const session = useContext(Context)
-    console.log('session at wrapper:', session);
-    
     useEffect(()=>{
       if(session){
         navigate('/Home')

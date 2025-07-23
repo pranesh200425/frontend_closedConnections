@@ -43,7 +43,7 @@ function App() {
 
 
   return (
-    <Context.Provider value={ {session, user, post, updatePost }}>
+    <Context.Provider value={ {session, user, post, updatePost, refresh, setRefresh} }>
       <BrowserRouter>
         <Routes>
           <Route path="/" element={<AppWrapper />} />

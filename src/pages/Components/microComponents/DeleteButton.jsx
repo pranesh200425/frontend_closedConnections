@@ -19,10 +19,7 @@ function DeleteButton({ userid, postid, render, change }) {
       .delete()
       .eq("id", postid)
       .select();
-    if (error) {
-      console.error("Error deleting post:", error);
-    } else {
-      console.log("Post deleted successfully:", data);
+    if (!error) {
       showModal(false);
       change(!render);
     }

@@ -11,9 +11,6 @@ function Login({ onSwitch }) {
   const [password, setPassword] = useState("");
   const [message, setMessage] = useState("");
 
-  const session = useContext(Context);
-  const [userSession, setUserSession] = useState(null);
-
   const navigate = useNavigate();
 
   const handleSubmit = async (e) => {
@@ -30,11 +27,15 @@ function Login({ onSwitch }) {
       setMessage(error.message);
     }
   };
-
-  useEffect(() => {
-    setUserSession(session.session);
-    console.log("userSession:", userSession);
-  }, []);
+  
+      const session = useContext(Context)
+      console.log('session', session);
+      
+      useEffect(()=>{
+        if(session.session != null){
+          navigate('/Home')
+        } 
+      },[session, navigate])
 
   return (
     <form
@@ -165,6 +166,10 @@ function Signup({ onSwitch }) {
       });
     navigate("/Home");
   };
+
+  useEffect(()=> {
+
+  },[])
 
   return (
     <form

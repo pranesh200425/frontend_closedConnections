@@ -53,7 +53,6 @@ export default function Feed() {
   useEffect(() => {
     setRefresh(!refresh);
   }, []);
-  let user;
   useEffect(() => {
     setUserSession(session);
     if (session != null) setuserdata(session.user);

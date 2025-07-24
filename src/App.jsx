@@ -6,16 +6,16 @@ import Feed from "./pages/Feed";
 import AppWrapper from "./pages/AppWrapper";
 import { Context } from "./Context";
 import { supabase } from "../supa_auth";
+import ProtectedRoute from "./ProtectedRoute";
 
 function App() {
   const [session, setSession] = React.useState(null);
   const [user, setUser] = React.useState(null);
   const [post, updatePost] = React.useState(null);
   const [refresh, setRefresh] = React.useState(false);
-  let updateSession; 
+  let updateSession;
   useEffect(() => {
     function getSession() {
-      
       const {
         data: { subscription },
       } = supabase.auth.onAuthStateChange((event, session) => {
@@ -36,20 +36,31 @@ function App() {
       } = await supabase.auth.getUser();
       //setUser(user)
     }
-    updateSession = getSession
-    getUser()
-    getSession()
+    updateSession = getSession;
+    getUser();
+    getSession();
   }, [refresh]);
 
-
   return (
-    <Context.Provider value={ {session, user, post, updatePost, refresh, setRefresh} }>
+    <Context.Provider
+      value={{ session, user, post, updatePost, refresh, setRefresh }}
+    >
       <BrowserRouter>
         <Routes>
           <Route path="/" element={<AppWrapper />} />
           <Route index path="/Login" element={<AuthPage />} />
-          <Route path="/Home" element={<Feed />} />
-          <Route path="/contact" element={<h1>Contact Page</h1>} />
+          <Route
+            path="/test"
+            element={
+              <ProtectedRoute>
+                <Feed />
+              </ProtectedRoute>
+            }
+          />
+          <Route element={<ProtectedRoute />}>
+            <Route path="/Home" element={<Feed />} />
+          </Route>
+
           <Route path="*" element={<h1>404 Not Found</h1>} />
         </Routes>
       </BrowserRouter>

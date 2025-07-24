@@ -56,6 +56,7 @@ export default function Feed() {
   useEffect(() => {
     setUserSession(session);
     if (session != null) setuserdata(session.user);
+    console.log(userdata);
     getPosts();
   }, [session, render]);
 
@@ -95,16 +96,16 @@ export default function Feed() {
                 <FontAwesomeIcon icon={faBackward} />
               </div>
               <div className="flex p-2 w-full items-center justify-center text-xl font-semibold ">
-                <h1>{userdata.username}</h1>
+                <h1>{userdata.user_metadata ? userdata.user_metadata.username : "Loading"}</h1>
               </div>
               <div>
-                <h1 className="pt-2 pb-2">{user.bio}</h1>
+                <h1 className="pt-2 pb-2">'random</h1>
               </div>
               <div>
-                <p className="pt-2 pb-2">{user.posts}</p>
+                <p className="pt-2 pb-2">12</p>
               </div>
               <div>
-                <p className="pt-2 pb-2">{user.joined}</p>
+                <p className="pt-2 pb-2">25th june</p>
               </div>
               <div className="flex w-full justify-start">
                 <button
@@ -120,21 +121,19 @@ export default function Feed() {
       )}
       {/* Sidebar for profile info */}
       <div
-        className="md:flex  flex-col items-start h-full md:w-[22%] w-11 bg-white p-6 shadow border-dotted border-r-2 border-gray-300  self-start"
-        id="sidebar"
-      >
-        <Nav style={style_md} />
-        <div className="text-2xl font-bold w-full mt-4 mb-4 text-gray-700  ">
-          {userdata.username}
-        </div>
-        <div className="text-gray-500 mb-2 text-center">bio</div>
-        <div className="flex flex-col gap-1 text-sm text-gray-600 w-full">
-          <div>
-            {/* <span className="font-semibold">Posts:</span> {user.posts} */}
-            <h1>213</h1>
+        className="md:flex flex-col justify-between items-start h-full md:w-[22%] w-11 bg-white p-6 shadow border-dotted border-r-2 border-gray-300  self-start" id="sidebar" >
+        <div>
+          <div className="flex justify-start text-2xl font-bold w-full mt-4 mb-4 text-gray-700  ">
+            {userdata.user_metadata ? userdata.user_metadata.username : "Loading"}
           </div>
-          <div>
-            <span className="font-semibold">Joined:</span> 25th june
+          <div className="text-gray-500 mb-2 ">bio</div>
+          <div className="flex flex-col gap-1 text-sm text-gray-600 w-full">
+            <div>
+              <h1>213</h1>
+            </div>
+            <div>
+              <span className="font-semibold">Joined:</span> 25th june
+            </div>
           </div>
         </div>
         <div>

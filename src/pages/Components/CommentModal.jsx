@@ -1,8 +1,14 @@
 import { faHeart } from '@fortawesome/free-solid-svg-icons'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import React from 'react'
+import { deletePost } from './microComponents/DeleteButton'
 
-function CommentModal({user, content, time, post_id, user_id}) {
+function CommentModal({user, content, time, post_id, user_id, comment_id}) {
+
+  const deleteComment = deletePost()
+
+  
+
   return (
     <div className='flex flex-col mt-2 mb-2 border-b  border-dotted border-gray-300' >
       <div className="comment flex justify-between items-center ">

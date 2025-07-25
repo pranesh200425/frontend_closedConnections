@@ -85,7 +85,7 @@ function PostModal({ setPost, change, render }) {
           </p>
         </div>
         <div className="other flex justify-between items-center ">
-          <div
+          {/* <div
             className="flex  text-pink-300 rounded  p-2 "
             onClick={handleLike}
           >
@@ -93,7 +93,7 @@ function PostModal({ setPost, change, render }) {
               <FontAwesomeIcon icon={faHeart} />
             </button>
             <span className="flex p-2">{like}</span>
-          </div>
+          </div> */}
         </div>
       </div>
       <div
@@ -110,6 +110,7 @@ function PostModal({ setPost, change, render }) {
               post_id={comment.post_id}
               user_id={comment.user_id}
               user={comment.user}
+              comment_id={comment.id}
             />
           ))
         ) : (

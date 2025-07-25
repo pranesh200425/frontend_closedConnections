@@ -122,8 +122,8 @@ function Post({
                 {content}
               </p>
             </div>
-            <div className="buttons flex mt-2  justify-around ">
-              <div className="flex  text-pink-300 rounded  p-2 ">
+            <div className="buttons flex mt-2  justify-between ">
+              {/* <div className="flex  text-pink-300 rounded  p-2 ">
                 <button
                   className="flex justify-center rounded items-center font-bold ease-in-out duration-150 cursor-pointer text-pink-300 hover:text-gray-950 hover:bg-pink-300 p-2"
                   onClick={handleLike}
@@ -131,7 +131,7 @@ function Post({
                   <FontAwesomeIcon icon={faHeart} />
                 </button>
                 <span className="flex p-2 font-bold ">{like}</span>
-              </div>
+              </div> */}
               <div className="flex  text-amber-300 rounded  p-2">
                 <button
                   className="flex text-amber-300 hover:text-amber-800 ease-in-out duration-150 rounded hover:bg-amber-200 cursor-pointer justify-center items-center font-bold p-2"

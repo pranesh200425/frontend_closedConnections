@@ -92,6 +92,7 @@ function Post({
     };
     updatePost(post);
     setPost(true);
+    change(!render);
   }
 
   const [like, updateLike] = useState(likes);

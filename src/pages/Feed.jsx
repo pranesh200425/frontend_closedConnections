@@ -9,9 +9,11 @@ import { faBars, faBackward } from "@fortawesome/free-solid-svg-icons";
 import Nav from "./Components/Nav";
 import { supabase } from "../../supa_auth.js";
 import { Context } from "../Context.jsx";
+import UserPost from "./Components/UserPost.jsx";
 
 export default function Feed() {
   const [posts, setPosts] = useState([]);
+  const [userPosts, setUserPosts] = useState([]);
   const [input, setInput] = useState("");
   const [userSession, setUserSession] = useState({});
   const [isPost, setPost] = useState(false);
@@ -33,6 +35,20 @@ export default function Feed() {
     }
   };
 
+  const getUserPosts = async () => {
+    try {
+      const { data, error } = await supabase
+        .from("posts")
+        .select("*")
+        .eq("user_id", userdata.id)
+        .order("id", { ascending: false });
+      setUserPosts(data);
+      change(true);
+    } catch (error) {
+      console.log("error fetching posts");
+    }
+  };
+
   const handlePost = async (e) => {
     e.preventDefault();
     if (input.trim() === "") return;
@@ -46,6 +62,7 @@ export default function Feed() {
     });
     setInput("");
     getPosts();
+    change(!render)
   };
 
   const { session, refresh, setRefresh } = useContext(Context);
@@ -56,8 +73,8 @@ export default function Feed() {
   useEffect(() => {
     setUserSession(session);
     if (session != null) setuserdata(session.user);
-    console.log(userdata);
     getPosts();
+    getUserPosts();
   }, [session, render]);
 
   const singout = async (e) => {
@@ -96,7 +113,11 @@ export default function Feed() {
                 <FontAwesomeIcon icon={faBackward} />
               </div>
               <div className="flex p-2 w-full items-center justify-center text-xl font-semibold ">
-                <h1>{userdata.user_metadata ? userdata.user_metadata.username : "Loading"}</h1>
+                <h1>
+                  {userdata.user_metadata
+                    ? userdata.user_metadata.username
+                    : "Loading"}
+                </h1>
               </div>
               <div>
                 <h1 className="pt-2 pb-2">'random</h1>
@@ -121,19 +142,42 @@ export default function Feed() {
       )}
       {/* Sidebar for profile info */}
       <div
-        className="md:flex flex-col justify-between items-start h-full md:w-[22%] w-11 bg-white p-6 shadow border-dotted border-r-2 border-gray-300  self-start" id="sidebar" >
+        className="md:flex flex-col justify-between items-start h-full md:w-[22%] w-11 bg-white p-6 shadow border-dotted border-r-2 border-gray-300  self-start"
+        id="sidebar"
+      >
         <div>
           <div className="flex justify-start text-2xl font-bold w-full mt-4 mb-4 text-gray-700  ">
-            {userdata.user_metadata ? userdata.user_metadata.username : "Loading"}
+            {userdata.user_metadata
+              ? userdata.user_metadata.username
+              : "Loading"}
           </div>
-          <div className="text-gray-500 mb-2 ">bio</div>
-          <div className="flex flex-col gap-1 text-sm text-gray-600 w-full">
-            <div>
-              <h1>213</h1>
-            </div>
-            <div>
-              <span className="font-semibold">Joined:</span> 25th june
-            </div>
+        </div>
+        <div className="flex flex-col w-full h-auto min-h-[50%]">
+          <div>
+            <h1 className="font-bold">Your posts</h1>
+          </div>
+          <div
+            id="noScroll"
+            className="flex flex-col w-full  border border-dotted overflow-y-scroll border-gray-300 p-2 rounded-2xl h-full "
+          >
+            {userPosts?.length > 0 ? (
+              userPosts.map((post) => (
+                <UserPost
+                  content={post.content}
+                  setPost={setPost}
+                  email={post.email}
+                  user={post.username}
+                  postid={post.id}
+                  time={post.created_at}
+                  group={post.group}
+                  comments={post.comments}
+                  change={change}
+                  render={render}
+                />
+              ))
+            ) : (
+              <div>you have not posted anything :/</div>
+            )}
           </div>
         </div>
         <div>

@@ -29,7 +29,7 @@ function Login({ onSwitch }) {
   };
   
       const session = useContext(Context)
-      console.log('session', session);
+      //console.log('session', session);
       
       useEffect(()=>{
         if(session.session != null){

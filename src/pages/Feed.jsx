@@ -152,7 +152,7 @@ export default function Feed() {
               : "Loading"}
           </div>
         </div>
-        <div className="flex flex-col w-full h-auto min-h-[50%]">
+        <div className="flex flex-col w-full h-auto min-h-[60%]">
           <div>
             <h1 className="font-bold">Your posts</h1>
           </div>
@@ -173,6 +173,7 @@ export default function Feed() {
                   comments={post.comments}
                   change={change}
                   render={render}
+                  key={post.created_at}
                 />
               ))
             ) : (

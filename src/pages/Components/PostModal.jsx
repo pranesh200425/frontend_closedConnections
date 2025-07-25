@@ -57,8 +57,6 @@ function PostModal({ setPost, change, render }) {
   };
 
   useEffect(() => {
-    console.log(post);
-    
     getComments();
   }, [render]);
 

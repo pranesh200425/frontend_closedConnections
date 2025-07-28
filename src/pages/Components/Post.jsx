@@ -70,10 +70,14 @@ function Post({
   change,
   render,
   userid,
+  modal,
+  showModal
 }) {
   const { ref, inView } = useInView();
   const { post, updatePost, session } = useContext(Context);
   const [show, setShow] = useState(false);
+/* 
+  const [modal, showModal] = useState(false); */
 
   useEffect(() => {
     if (session.user.id === userid) setShow(true);
@@ -112,17 +116,26 @@ function Post({
           <div className="flex w-full flex-col pr-2 pl-2 border-b  border-dotted border-gray-300">
             <div className="postMeta-data flex items-center justify-between ">
               <h3 className="text-lg font-semibold text-gray-600 ">{user}</h3>
-              {show && <DeleteButton userid={userid} postid={postid} change={change} render={render} />}
+              {show && (
+                <DeleteButton
+                  userid={userid}
+                  postid={postid}
+                  change={change}
+                  render={render}
+                  modal={modal}
+                  showModal={showModal}
+                />
+              )}
             </div>
             <div
-              className="content flex pt-[0.5rem] pb-2  "
+              className="content flex pt-[0.5rem]"
               onClick={(e) => openPostModal(e)}
             >
               <p className="text-gray-400 leading-7 cursor-pointer w-full ">
                 {content}
               </p>
             </div>
-            <div className="buttons flex mt-2  justify-between ">
+            <div className="buttons flex   justify-between ">
               {/* <div className="flex  text-pink-300 rounded  p-2 ">
                 <button
                   className="flex justify-center rounded items-center font-bold ease-in-out duration-150 cursor-pointer text-pink-300 hover:text-gray-950 hover:bg-pink-300 p-2"
@@ -132,7 +145,7 @@ function Post({
                 </button>
                 <span className="flex p-2 font-bold ">{like}</span>
               </div> */}
-              <div className="flex  text-amber-300 rounded  p-2">
+              <div className="flex justify-center items-center text-amber-300 rounded">
                 <button
                   className="flex text-amber-300 hover:text-amber-800 ease-in-out duration-150 rounded hover:bg-amber-200 cursor-pointer justify-center items-center font-bold p-2"
                   onClick={(e) => openPostModal(e)}

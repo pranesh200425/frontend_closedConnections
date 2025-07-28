@@ -3,22 +3,22 @@ import "../../App.css";
 import CommentModal from "./CommentModal";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faBackward, faHeart } from "@fortawesome/free-solid-svg-icons";
-import { useEffect, useContext } from "react";
+import { useEffect, useContext, useState } from "react";
 import { formatTime } from "./Post";
 import { supabase } from "../../../supa_auth";
 import { Context } from "../../Context";
 
-function PostModal({ setPost, change, render }) {
+function PostModal({ setPost, change, render, modal, showModal }) {
   const [input, setInput] = React.useState("");
   const [comments, setComments] = React.useState([]);
 
   const { user } = useContext(Context);
   const { post, updatePost } = useContext(Context);
-  const [like, updateLike] = React.useState(post.likes);
-  
+  const [like, updateLike] = useState(post.likes);
+
   const handleLike = () => {
     updateLike(like + 1);
-    change(!render)
+    change(!render);
   };
   const postComment = async () => {
     if (input === "") return null;
@@ -43,7 +43,7 @@ function PostModal({ setPost, change, render }) {
     change(false);
     setInput("");
     getComments();
-    change(!render)
+    change(!render);
   };
 
   const getComments = async () => {
@@ -76,7 +76,7 @@ function PostModal({ setPost, change, render }) {
         <div className="post-data flex justify-between items-center  ">
           <div className="username flex text-xl"> {post.user}</div>
           <div className="time flex p-2 text-purple-400 font-semibold text-sm">
-            {post.time }
+            {post.time}
           </div>
         </div>
         <div className="content flex mt-2 mb-2">
@@ -111,6 +111,10 @@ function PostModal({ setPost, change, render }) {
               user_id={comment.user_id}
               user={comment.user}
               comment_id={comment.id}
+              change={change}
+              render={render}
+              modal={modal}
+              showModal={showModal} 
             />
           ))
         ) : (

@@ -20,6 +20,7 @@ export default function Feed() {
   const [userdata, setuserdata] = useState({});
   const [render, change] = useState(true);
   const navigate = useNavigate();
+  const [modal, showModal] = useState(false);
 
   const getPosts = async () => {
     try {
@@ -62,7 +63,7 @@ export default function Feed() {
     });
     setInput("");
     getPosts();
-    change(!render)
+    change(!render);
   };
 
   const { session, refresh, setRefresh } = useContext(Context);
@@ -146,7 +147,7 @@ export default function Feed() {
         id="sidebar"
       >
         <div>
-          <div className="flex justify-start text-2xl font-bold w-full mt-4 mb-4 text-gray-700  ">
+          <div className="flex justify-start text-2xl font-bold border-b border-dotted border-gray-300 w-full mt-4 mb-4 text-gray-600  ">
             {userdata.user_metadata
               ? userdata.user_metadata.username
               : "Loading"}
@@ -191,7 +192,7 @@ export default function Feed() {
         </div>
       </div>
       {/* Main feed */}
-      <div className="md:w-[50%] flex w-full grow h-3/4 md:h-full border-dotted border-r-2 pr-2 pl-2 border-gray-300 relative">
+      <div className="md:w-[50%] flex w-full grow h-3/4 md:h-full border-dotted border-r-2 border-gray-300 relative">
         {!isPost && (
           <div className="flex w-[98%] absolute bottom-0" /* id='postForm' */>
             <form className="flex pr-6 pl-6 pt-2 pb-2 rounded-lg w-full shadow border-dotted bg-gray-100   border-yellow-300 ">

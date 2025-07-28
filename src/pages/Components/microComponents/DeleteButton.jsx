@@ -4,20 +4,20 @@ import { faTrash } from "@fortawesome/free-solid-svg-icons";
 import { Context } from "../../../Context";
 import { supabase } from "../../../../supa_auth";
 
-export const deletePost = async (isComment = false) => {
-  const table = isComment ? 'comments' : 'posts'
-  const id = isComment ? 'comments' : postid;
-  const { data, error } = await supabase
-    .from(table)
-    .delete()
-    .eq("id", postid)
-    .select();
-  if (!error) {
-    showModal(false);
-    change(!render);
-  }
-};
 function DeleteButton({ userid, postid, render, change }) {
+  const deletePost = async (isComment = false) => {/* 
+    const table = isComment ? "comments" : "posts";
+    const id = isComment ? "comments" : postid; */
+    const { data, error } = await supabase
+      .from('posts')
+      .delete()
+      .eq("id", postid)
+      .select();
+    if (!error) {
+      showModal(false);
+      change(!render);
+    }
+  };
   const [show, setShow] = React.useState(false);
   const [modal, showModal] = React.useState(false);
   const { session } = useContext(Context);
@@ -25,7 +25,6 @@ function DeleteButton({ userid, postid, render, change }) {
   useEffect(() => {
     if (userid === session.user.id) setShow(true);
   }, []);
-
 
   return (
     <span className=" relative ">
@@ -36,7 +35,12 @@ function DeleteButton({ userid, postid, render, change }) {
         <div className="relative " onClick> */}
       {!modal ? (
         <div className="flex absolute right-0 top-0 p-2 font-semibold">
-          <button onClick={() => showModal(true)} className="cursor-pointer text-red-500" ><FontAwesomeIcon icon={faTrash } /></button>
+          <button
+            onClick={() => showModal(true)}
+            className="cursor-pointer text-red-500"
+          >
+            <FontAwesomeIcon icon={faTrash} />
+          </button>
         </div>
       ) : (
         <div className="flex flex-col w-3xs bg-white justify-center z-[10000] items-center absolute right-[50%]  ">
@@ -59,9 +63,6 @@ function DeleteButton({ userid, postid, render, change }) {
           </div>
         </div>
       )}
-      {/* 
-        </div>
-      )} */}
     </span>
   );
 }
